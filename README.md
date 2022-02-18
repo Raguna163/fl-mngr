@@ -21,7 +21,7 @@ yarn electron
 - History for each pane and remembers last setup
 - Thumbnail generation with caching *(including GIF!)*
 - Search both panes, or filter each pane separately
-- Light profanity for my sanity
+- Light profanity for my sanity (treat it as debug code)
 
 
 ### Planned features
