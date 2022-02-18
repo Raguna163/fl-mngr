@@ -1,0 +1,179 @@
+$border-colour: rgba(255,255,255,0.2);
+$folder-colour: #d4d65a;
+
+.list {
+    font-family: "Fira Code";
+    position: relative;
+    list-style: none;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    flex: 1 1 10px;
+    height: 90%;
+    padding: 10px;
+    margin: 10px;
+    &:hover {
+        overflow-y: scroll;
+        margin-right: 5px;
+    }
+    hr {
+        border: 1px dashed $border-colour;
+        margin: 1px 20px;
+        &:last-child {
+            border: none;
+        }
+    }
+    span {
+        align-self: center;
+    }
+    &-empty {
+        @extend .list;
+        padding-top: 50px;
+        text-align: center;
+        .empty-folder {
+            color: $folder-colour;
+            margin: 10px;
+        }
+        .icon {
+            margin-right: 10px;
+        }
+        .context-actions {
+            width: fit-content;
+            margin: 10px auto;
+            padding: 10px 15px;
+            border-radius: 2px;
+            &:last-child {
+                display: none;
+            }
+        }
+    }
+}
+
+.list-grid {
+    @extend .list;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: flex-start;
+    hr {
+        display: none;
+    }
+    .list-item {
+        flex-direction: column;
+        align-self: center;
+        font-size: small;
+        max-width: 30%;
+        min-width: 10%;
+        padding: 5px 10px;
+        span {
+            align-self: center;
+            text-align: center;
+            // max-width: 125px;
+            max-width: 75%;
+        }
+        .check-icon {
+            position: absolute;
+            left: 0;
+            top: 10%;
+        }
+    }
+    .folder-icon, .check-icon, .file-icon {
+        margin: 10px;
+        margin-top: 5px;
+        font-size: inherit;
+    }
+}
+
+.split-list {
+    overflow-y: hidden;
+    display: flex;
+    flex: 1 1 1px;
+    height: 100%;
+    padding: 5px;
+    .list-item {
+        max-width: 100%;
+    }
+    .list {
+        padding: 10px;
+        height: 100%;
+        width: inherit;
+        min-width: 25%;
+        max-width: 50%;
+        &:first-child {
+            flex: 0 1 auto;
+        }
+        &:hover {
+            padding-right: 5px;
+            margin-right: 10px;
+        }
+    }
+}
+
+.list-divider {
+    border-right: 1px dashed $border-colour;
+    margin-top: 20px;
+}
+
+.file-icon, .folder-icon, .check-icon {
+    align-self: center;
+}
+
+.folder-icon {
+    color: #d4d65a;
+    margin: 0 10px; 
+}
+
+.file-icon {
+    margin: 0 10px;
+}
+
+.check-icon {
+    color: #70e7a6;
+    float: right;
+    margin-right: 10px;
+    margin-left: auto;
+}
+
+.list-item {
+    position: relative;
+    display: flex;
+    overflow-wrap: anywhere;
+    transition: all 0.1s ease-in-out;
+    padding: 8px 5px;
+    margin: 5px 0;
+    &:hover::before {
+        left: 0;
+        top: 0;
+        border-radius: 0;
+        width: 100%;
+        height: 100%;
+        background-color: $border-colour;
+    }
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        // transition: all 0.2s cubic-bezier(0.2, 0.5, 0.5, 1.4);
+        transition: all 0.15s cubic-bezier(0.1, 0.9, 0.2, 0.8);
+        left: 50%;
+        top: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 100%;
+        background-color: transparent;
+    }
+}
+
+.img-icon {
+    // width: 150px;
+    width: auto;
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+    img {
+        transition: all 0.1s ease-in-out;
+        // margin: inherit;
+        // max-height: 100px;
+        // max-width: 150px;
+        width: auto;
+    }
+}

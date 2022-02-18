@@ -1,0 +1,39 @@
+%grad-left-right {
+    background-image: linear-gradient(90deg, #8ed3df, #dd86ca);   
+    background-clip: text;
+    color: transparent;
+}
+
+%grad-right-left {
+    background-image: linear-gradient(270deg, #8ed3df, #dd86ca);
+    background-clip: text;
+    color: transparent;
+}
+
+.status-bar {
+    font-weight: bold;
+    margin-top: 10px;
+    padding: 2px 1%;
+    display: flex;
+    background-color: rgba($color: #000000, $alpha: 0.2);
+    span {
+        padding: 5px 0;
+        margin: auto 5px;
+    }
+    div {
+        justify-content: center;
+        display: flex;
+        flex: 1;
+        &:first-child span {
+            @extend %grad-left-right;
+            margin-right: auto;
+        }
+        &:last-child span {
+            @extend %grad-right-left;
+            margin-left: auto;
+        }
+    }
+    svg {
+        color: #b33d3d;
+    }
+}

@@ -1,0 +1,48 @@
+.pane-controls {
+    padding: 10px;
+    margin: 10px;
+    display: flex;
+    input {
+        caret-color: #FFF;
+    }
+    &-left, &-right {
+        @extend .pane-controls;
+    }
+    &-right {
+        flex-direction: row-reverse;
+        input {
+            text-align: right;
+        }
+    }
+}
+
+.pane-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    svg {
+        cursor: pointer;
+        border-radius: 100px;
+        padding: 5px;
+        margin: 0 3px;
+        box-sizing: content-box;       
+    }
+    .control-active:hover {
+        transition: all 0.2s cubic-bezier(0.1, 0.9, 0.2, 1);
+        border-radius: 5px;
+        background-color: rgba($color: #FFF, $alpha: 0.3);
+    } 
+    .control-inactive {
+        cursor: default;
+    }
+    div {
+        position: relative;
+    }
+    &-left, &-right {
+        @extend .pane-buttons;
+    }
+    &-right {
+        flex-direction: row-reverse;
+    }
+    
+}

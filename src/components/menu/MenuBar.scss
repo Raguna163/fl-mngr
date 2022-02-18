@@ -1,0 +1,18 @@
+.menu-bar {
+  margin: 10px 1%;
+  padding: 10px;
+  display: flex;
+  align-content: center;
+  justify-content: space-between;
+}
+
+.settings {
+  padding: 10px;
+  h4 {
+    margin: 10px 0;
+  }
+  div {
+    display: flex;
+    justify-content: space-between;
+  }
+}

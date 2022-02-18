@@ -1,0 +1,39 @@
+%grad-left-right {
+    background-image: linear-gradient(90deg, #8ed3df, #dd86ca);   
+    background-clip: text;
+    color: transparent;
+}
+
+%grad-right-left {
+    background-image: linear-gradient(270deg, #8ed3df, #dd86ca);
+    background-clip: text;
+    color: transparent;
+}
+
+.title {
+    margin: 0 10px;
+    font-family: "Fira Code";
+    text-align: center;
+    &-left {
+        transition: all 0.5s ease-in;
+        @extend %grad-left-right;
+        &:hover {
+            @extend %grad-right-left;
+        }
+    }
+    &-right {
+        transition: all 1s ease-in;
+        @extend %grad-right-left;
+        &:hover {
+            @extend %grad-left-right;
+        }
+    }
+    h1 {
+        margin-top: 15px;
+        margin-bottom: 0;
+    }
+    h5 {
+        margin-top: 0;
+        margin-bottom: 15px;
+    }
+}

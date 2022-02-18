@@ -1,0 +1,29 @@
+.Path {
+    font-family: "Fira Code Retina";
+    display: flex;
+    flex-wrap: wrap;
+    margin: 15px;
+    p {
+        margin: 0;
+    }
+    span {
+        cursor: pointer;
+        margin: 0 5px;
+        &:hover {
+            font-weight: bold;
+        }
+        &:last-child {
+            cursor: default;
+        }
+    }
+}
+
+.crumb-icon {
+    color: #d4d65a;
+    font-size: 14px;
+    margin: 0 1px;
+}
+
+.active-crumb {
+    font-weight: bold;
+}
