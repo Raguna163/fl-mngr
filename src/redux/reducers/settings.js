@@ -6,8 +6,6 @@ import {
     CHANGE_ZOOM
 } from "../actions/types";
 
-console.log(window.initialState.settings);
-
 const SAVED_STATE = window.initialState.settings;
 
 export default (state = SAVED_STATE, { payload, type }) => {
