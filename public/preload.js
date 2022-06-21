@@ -28,5 +28,5 @@ contextBridge.exposeInMainWorld(
     }
 );  
 
-const initialState = JSON.parse(readFileSync(join(__dirname, "/state.json")));
+const initialState = JSON.parse(readFileSync(join(__dirname, "state.json")));
 contextBridge.exposeInMainWorld("initialState", initialState);

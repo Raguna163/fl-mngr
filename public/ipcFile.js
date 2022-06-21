@@ -39,7 +39,7 @@ async function readDir(event, { dir, side }) {
         const [folders, files] = sortFiles(filenames);
         event.sender.send('dir:read', { side, files, folders, dir });
 
-        const stateFile = path.join(__dirname, "/state.json");
+        const stateFile = path.join(__dirname, "state.json");
         const state = JSON.parse(await fs.readFile(stateFile));
         state.directory[side] = dir;
         fs.writeFile(stateFile, JSON.stringify(state, null, 2))

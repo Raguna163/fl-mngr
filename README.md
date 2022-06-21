@@ -10,8 +10,6 @@ yarn start
 yarn electron
 ```
 
-#### *Note: I'm having issues with sass supporting Node versions higher than 14.x*
-
 ## Implemented Features
 
 - List view, and grid view with zoom

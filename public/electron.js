@@ -1,7 +1,10 @@
 const { app, BrowserWindow, ipcMain, screen } = require('electron');
 const path = require('path');
+const url = require('url');
+const isDev = require('electron-is-dev');
 const { copy } = require('copy-paste');
 const FileIPC = require('./ipcFile');
+// require('electron-debug')()
 
 let Window;
 
@@ -13,20 +16,26 @@ async function createWindow(x,y) {
         height: 800,
         minWidth: 600,
         minHeight: 600,
-        icon: path.join(__dirname, 'public/fl-icon.png'),
+        icon: path.join(__dirname, 'fl-icon.png'),
         webPreferences: {
             webSecurity: true,
             contextIsolation: true,
             worldSafeExecuteJavaScript: true,
             enableRemoteModule: false,
-            preload: path.join(__dirname, 'preload.js')
+            preload: path.join(__dirname, (isDev ? "" : '/../build') + '/preload.js')
         }
     });
     Window.on('closed', () => Window = null);
-    Window.loadURL("http://localhost:3000");
+    let fileURL = url.format({
+            pathname: path.join(__dirname, '/../build/index.html'),
+            protocol: 'file:',
+            slashes: true
+    });
+    Window.loadURL(isDev ? "http://localhost:3000" : fileURL);
+
+    // React Devtools
     // let reactDevToolsPath = "Google\\Chrome\\User Data\\Default\\Extensions\\fmkadmapgofadopljbjfkapdkoienihi\\4.8.2_0"
     // Window.webContents.session.loadExtension(path.join(process.env.LOCALAPPDATA, reactDevToolsPath));
-    // Window.loadFile(path.join(__dirname,'build/index.html'));
 }
 
 app.whenReady().then(() => {
