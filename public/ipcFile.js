@@ -4,6 +4,8 @@ const path = require('path');
 const trash = require('trash');
 const sharp = require('sharp');
 const chokidar = require('chokidar');
+const isDev = require('electron-is-dev');
+const settings = require('electron-settings');
 
 let FSWatcher = { left: null, right: null };
 const FSOptions = {
@@ -39,10 +41,14 @@ async function readDir(event, { dir, side }) {
         const [folders, files] = sortFiles(filenames);
         event.sender.send('dir:read', { side, files, folders, dir });
 
-        const stateFile = path.join(__dirname, "state.json");
-        const state = JSON.parse(await fs.readFile(stateFile));
-        state.directory[side] = dir;
-        fs.writeFile(stateFile, JSON.stringify(state, null, 2))
+        if (isDev) {
+            const settingsPath = path.join(process.env.APPDATA, 'fl-mngr', 'state.json');
+            const state = JSON.parse(await fs.readFile(settingsPath));
+            state.directory[side] = dir;
+            fs.writeFile(settingsPath, JSON.stringify(state, null, 2));
+        } else {
+            console.log(settings.file())
+        }
     } catch (err) {
         console.log(err);
     }
@@ -123,5 +129,5 @@ module.exports = {
     newItem, 
     deleteItems,
     previewFile,
-    imgIcon
+    imgIcon,
 }

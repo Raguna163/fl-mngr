@@ -16,13 +16,13 @@ async function createWindow(x,y) {
         height: 800,
         minWidth: 600,
         minHeight: 600,
-        icon: path.join(__dirname, 'fl-icon.png'),
+        icon: path.join(__dirname, 'icon.png'),
         webPreferences: {
             webSecurity: true,
             contextIsolation: true,
             worldSafeExecuteJavaScript: true,
             enableRemoteModule: false,
-            preload: path.join(__dirname, (isDev ? "" : '/../build') + '/preload.js')
+            preload: path.join(__dirname, '/preload.js')
         }
     });
     Window.on('closed', () => Window = null);
@@ -34,7 +34,9 @@ async function createWindow(x,y) {
     Window.loadURL(isDev ? "http://localhost:3000" : fileURL);
 
     // React Devtools
-    // let reactDevToolsPath = "Google\\Chrome\\User Data\\Default\\Extensions\\fmkadmapgofadopljbjfkapdkoienihi\\4.8.2_0"
+    // let extFolder = "fmkadmapgofadopljbjfkapdkoienihi";
+    // let extVersion = "4.24.7_0"
+    // let reactDevToolsPath = `Google\\Chrome\\User Data\\Default\\Extensions\\${extFolder}\\${extVersion}`
     // Window.webContents.session.loadExtension(path.join(process.env.LOCALAPPDATA, reactDevToolsPath));
 }
 

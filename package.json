@@ -30,7 +30,7 @@
     "trash": "^6.1.1"
   },
   "scripts": {
-    "dev:start": "set NODE_OPTIONS=--openssl-legacy-provider && react-scripts start",
+    "dev:start": "cross-env NODE_OPTIONS=--openssl-legacy-provider react-scripts start",
     "dev:electron": "electron .",
     "build:react": "set NODE_OPTIONS=--openssl-legacy-provider && react-scripts build",
     "postbuild:react": "node mid-build.js",
@@ -39,8 +39,7 @@
     "build:test": "yarn build:react && yarn build:electron --dir && start ./dist/win-unpacked/fl-mngr.exe",
     "build:win": "yarn build:react && yarn build:electron -w",
     "build:linux": "yarn build:react && yarn build:electron -l",
-    "build:mac": "yarn build:react && yarn build:electron -m",
-    "check:env": "node -e 'console.log(process.env)'"
+    "build:mac": "yarn build:react && yarn build:electron -m"
   },
   "eslintConfig": {
     "extends": "react-app"

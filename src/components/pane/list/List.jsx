@@ -11,7 +11,7 @@ function List(props) {
     const { side } = props;
     const { dir } = props[side];
     const { splitView, grid } = props.settings[side];
-    let { files, folders } = props[props.side];
+    let { files, folders } = props[side];
 
     function filterResults(items, filter) {
         return items.filter(item => item.toLowerCase().includes(filter));
@@ -21,6 +21,7 @@ function List(props) {
         files = filterResults(files, props.filter);
         folders = filterResults(folders, props.filter);
     }
+
     if (props[side].filter) {
         files = filterResults(files, props[side].filter);
         folders = filterResults(folders, props[side].filter);

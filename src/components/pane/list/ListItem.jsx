@@ -41,7 +41,7 @@ function ListItem(props) {
 
     function handleClick (e) {
         e.stopPropagation();
-        const func = props.isFolder ? () => props.changeDir(target + '/', side) : () => props.openFile(target);
+        const func = props.isFolder ? () => props.changeDir(target + '\\', side) : () => props.openFile(target);
         if (e.ctrlKey) {
             if (itemSelected) props.removeSelection(item);
             else props.addSelection(item, side);

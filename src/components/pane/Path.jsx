@@ -8,8 +8,8 @@ function Path(props) {
     let pathTo = "";
     return (
         <div className="Path">{
-            props.dir.split('/').slice(0, -1).map((crumb, idx, arr) => {
-                pathTo += `${crumb}/`
+            props.dir.split('\\').slice(0, -1).map((crumb, idx, arr) => {
+                pathTo += `${crumb}\\`
                 let target = pathTo;
                 let handleContext = e => {
                     e.stopPropagation();
