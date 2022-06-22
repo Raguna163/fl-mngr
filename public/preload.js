@@ -1,9 +1,9 @@
-const { contextBridge, ipcRenderer } = require("electron");
-const { readFileSync, existsSync, writeFileSync } = require("fs");
-const { join } = require("path");
-const REI = require('redux-electron-ipc');
 
 process.once('loaded', () => {
+    const { contextBridge, ipcRenderer } = require("electron");
+    const { readFileSync, existsSync, writeFileSync } = require("fs");
+    const { join } = require("path");
+    const REI = require('redux-electron-ipc');
     // Expose protected methods that allow the renderer process to use
     // the ipcRenderer without exposing the entire object
     contextBridge.exposeInMainWorld(
@@ -28,9 +28,8 @@ process.once('loaded', () => {
             }
     }
     );
-    console.log(process.env);
     const settingsPath = join(process.env.APPDATA, 'fl-mngr', 'state.json');
-    let initialState = undefined;
+    let initialState;
     if (!existsSync(settingsPath)) {
         const { HOMEDRIVE, HOMEPATH } = process.env;
         let homePath = join(HOMEDRIVE, HOMEPATH) + "\\"; 
@@ -58,6 +57,5 @@ process.once('loaded', () => {
         writeFileSync(settingsPath, JSON.stringify(initialState, null, 2))
     }
     initialState = JSON.parse(readFileSync(settingsPath));
-    console.log(initialState);
     contextBridge.exposeInMainWorld("initialState", initialState);
 });

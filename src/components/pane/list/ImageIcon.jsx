@@ -1,5 +1,4 @@
 import React from 'react';
-import IPC from '../../../redux/actions/ipcTx';
 import cache from '../../../imageCache';
 import { useSelector } from 'react-redux';
 
@@ -18,7 +17,7 @@ function ImageIcon({ target, side }) {
                 Image.setAttribute('src', `data:image/jpeg;base64, ${entry}`);
             } else {
                 // Image.setAttribute('src', );
-                IPC.send('img:icon', { target, ID, side });
+                window.ipc.send('img:icon', { target, ID, side });
                 Image.onload = () => {
                     let data = Image.getAttribute('src').split(',')[1];
                     if (data) cache.addEntry(ID, data);

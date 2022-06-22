@@ -2,7 +2,6 @@ class ImageCache {
     constructor() {
         this.entries = []
         this.data = {}
-        // this.addEntry = this.addEntry.bind(this);
     }
     addEntry(entry, data) {
         this.entries.push(entry);

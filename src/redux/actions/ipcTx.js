@@ -14,8 +14,6 @@ function combineDispatch(dispatch, ...args) {
     });
 }
 
-export default window.ipc;
-
 export const fetchDir = (side) => (dispatch, getState) => {
     const { dir } = getState().directory[side];
     combineDispatch(dispatch, sendIpc('read:dir', { dir, side }));

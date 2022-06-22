@@ -7,9 +7,8 @@ import { Provider } from "react-redux";
 import store from './redux/reducers';
 import { library } from "@fortawesome/fontawesome-svg-core";
 import Icons from './icons';
-import IPC from './redux/actions/ipcTx'
 
-IPC.receive('icon', IPC.icons);
+window.ipc.receive('icon', window.ipc.icons);
 library.add(Icons);
 
 ReactDOM.render(

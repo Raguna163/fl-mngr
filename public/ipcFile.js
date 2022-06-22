@@ -1,11 +1,7 @@
 const { exec } = require('child_process');
 const fs = require('fs').promises;
 const path = require('path');
-const trash = require('trash');
 const sharp = require('sharp');
-const chokidar = require('chokidar');
-const isDev = require('electron-is-dev');
-const settings = require('electron-settings');
 
 let FSWatcher = { left: null, right: null };
 const FSOptions = {
@@ -35,20 +31,16 @@ async function copyOrMove(e, { selected, dir, target }, move) {
 }
 
 async function readDir(event, { dir, side }) {
+    const chokidar = require('chokidar');
     if (FSWatcher[side]) FSWatcher[side].close();
     try {
         let filenames = await fs.readdir(dir, { withFileTypes: true });
         const [folders, files] = sortFiles(filenames);
         event.sender.send('dir:read', { side, files, folders, dir });
-
-        if (isDev) {
-            const settingsPath = path.join(process.env.APPDATA, 'fl-mngr', 'state.json');
-            const state = JSON.parse(await fs.readFile(settingsPath));
-            state.directory[side] = dir;
-            fs.writeFile(settingsPath, JSON.stringify(state, null, 2));
-        } else {
-            console.log(settings.file())
-        }
+        const settingsPath = path.join(process.env.APPDATA, 'fl-mngr', 'state.json');
+        const state = await JSON.parse(await fs.readFile(settingsPath));
+        state.directory[side] = dir;
+        fs.writeFile(settingsPath, JSON.stringify(state, null, 2));
     } catch (err) {
         console.log(err);
     }
@@ -71,20 +63,16 @@ async function copyItems(e, data) { copyOrMove(e, data, false) }
 async function moveItems(e, data) { copyOrMove(e, data, true) }
 
 async function renameFile(e, { oldName, newName, dir }) {
-    // let type = fs.statSync(path.join(dir, oldName)).isDirectory() ? 'folders' : 'files';
     fs.rename(path.join(dir, oldName), path.join(dir, newName));
     e.sender.send('delete', { selection: oldName, otherSide: false });
-    // e.sender.send('new', { name: newName, addTo: type });
 }
 async function newItem(e, { target, name, command }) {
-    // let type = command === "New File" ? 'files' : 'folders'
-    // if (type === "files") fs.writeFileSync(path.join(target, name), "");
     if (command === "New File") fs.writeFile(path.join(target, name), "");
     else fs.mkdir(path.join(target, name));
-    // e.sender.send('new', { name, addTo: type });
 }
 
 async function deleteItems(e, { selected, dir }) {
+    const trash = require('trash');
     selected.forEach(selection => {
         let target = path.join(dir, selection);
         trash(target);

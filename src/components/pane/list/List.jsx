@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import './List.scss';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -27,10 +27,6 @@ function List(props) {
         folders = filterResults(folders, props[side].filter);
     }
 
-    useEffect(()=>{},[files,folders]);
-
-    
-    
     function renderList(items, isFolder) {
         const type = isFolder ? "folder" : "file";
         return items.map((item,idx) => (
@@ -41,7 +37,7 @@ function List(props) {
                     side={side}
                     isFolder={isFolder}
                     fileIcon={
-                        addIcon(type,item) === "file-image" && props.settings.thumbnails
+                        props.settings.thumbnails && addIcon(type,item) === "file-image"
                         ? <ImageIcon target={dir + item} side={side}/>
                         : <FontAwesomeIcon className={`${type}-icon`} icon={addIcon(type, item)} />
                     }
@@ -56,7 +52,7 @@ function List(props) {
                 <span>The folder</span>
                 <span className="empty-folder">
                      <FontAwesomeIcon className="icon" icon="folder"/> 
-                     {dir.split('/')[dir.split('/').length - 2]}
+                     {dir.split('\\')[dir.split('\\').length - 2]}
                 </span>
                 <span>is empty</span>
                 <ContextActions type="pane" />
