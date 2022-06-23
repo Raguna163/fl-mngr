@@ -1,15 +1,23 @@
 # FL-MNGR
 
-## **Dual Pane File Explorer** *(Beta)*
+## **Dual Pane File Explorer**
 
-### ***Quick Start***
+### ***Release***
+**[Download latest release](https://github.com/Raguna163/fl-mngr/releases/latest)** *(windows only)*
 
-Check releases for the install files. Tested on windows only for now.
+### ***Development***
 
 ```
+git clone https://github.com/Raguna163/fl-mngr.git
+cd fl-mngr
 yarn install
-yarn start
-yarn electron
+yarn dev:start
+```
+
+### ***Production***
+```
+yarn build:full  - builds project into installer file
+yarn build:test  - builds project into unpacked directory
 ```
 
 ## Implemented Features
@@ -21,10 +29,8 @@ yarn electron
 - History for each pane and remembers last setup
 - Thumbnail generation with caching *(including GIF!)*
 - Search both panes, or filter each pane separately
-- Light profanity for my sanity (treat it as debug code)
 
-
-### Planned features
+## Planned features
 
 - Persistent Cache
 - Keyboard controls & hotkeys
