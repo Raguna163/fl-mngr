@@ -17,10 +17,16 @@ export default (state = SAVED_STATE, { payload, type }) => {
         case TOGGLE_THUMBNAILS:
             return { ...state, thumbnails: !state.thumbnails }
         case TOGGLE_VIEW:
-            let { side, type } = payload
-            return { ...state, [side]: { ...state[side], [type]: !state[side][type] } }
+            return { 
+                ...state, 
+                [payload.side]: { 
+                    ...state[payload.side], 
+                    [payload.type]: !state[payload.side][payload.type] 
+                } 
+            }
         case CHANGE_ZOOM:
-            let zoom = payload.type === "increase" ? state[payload.side].zoom + 1 : state[payload.side].zoom - 1;
+            let { zoom } = state[payload.side];
+            zoom += payload.type === "increase" ? 1 : -1;
             zoom = zoom > 4 ? 4 : zoom < 0 ? 0 : zoom;
             return { 
                 ...state, 
@@ -31,5 +37,5 @@ export default (state = SAVED_STATE, { payload, type }) => {
             }
         default:
             return state;
-    }
+        }
 };  
