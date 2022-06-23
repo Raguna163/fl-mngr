@@ -99,7 +99,7 @@ async function imgIcon(e, { target, ID, side }) {
     } else {
         sharp(target)
             .resize({ width: 200, kernel: sharp.kernel.mitchell })
-            .jpeg({ quality: 90 })
+            .jpeg({ quality: 80 })
             .toBuffer()
             .then(data => e.sender.send('icon', { data, ID, side }))
             .catch(err => { if (err.message !== "Input file is missing") console.log(err) });
