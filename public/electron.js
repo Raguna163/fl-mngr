@@ -31,8 +31,7 @@ async function createWindow(x,y) {
         let reactDevToolsPath = `Google\\Chrome\\User Data\\Default\\Extensions\\${extFolder}\\${extVersion}`
         Window.webContents.session.loadExtension(path.join(process.env.LOCALAPPDATA, reactDevToolsPath));
     } else {
-        const url = require('url');
-        Window.loadURL(url.format({
+        Window.loadURL(require('url').format({
             pathname: path.join(__dirname, '/../build/index.html'),
             protocol: 'file:',
             slashes: true
@@ -40,7 +39,7 @@ async function createWindow(x,y) {
     }
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
     let offset = 40;
     let displays = screen.getAllDisplays();
     let externalDisplay = displays.find(({bounds}) => bounds.x !== 0 || bounds.y !== 0);
