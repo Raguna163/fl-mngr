@@ -8,13 +8,11 @@ function StatusBar() {
     let itemsSelected = selection.selected.length;
     return (
         <footer className="status-bar">
-        <div><span>A E S T H E T I C</span></div>
         <div>{ 
             itemsSelected > 0 
             ? <span>{itemsSelected} Selected</span> 
             : <span>Made With <FontAwesomeIcon icon="heart"/></span> 
         }</div>
-        <div><span>A S - F U C K</span></div>
         </footer>
     );
 }
