@@ -4,6 +4,8 @@
 
 ### ***Quick Start***
 
+Check releases for the install files. Tested on windows only for now.
+
 ```
 yarn install
 yarn start
@@ -24,7 +26,9 @@ yarn electron
 
 ### Planned features
 
+- Persistent Cache
 - Keyboard controls & hotkeys
+- Drag & Drop functionality
 - Video thumbnail creation
 - Better built in media previews 
 - External Drive Support 
