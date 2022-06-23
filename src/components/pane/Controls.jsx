@@ -20,8 +20,6 @@ function Controls(props) {
     let zoomInDisabled = zoom === 4;
     let zoomOutDisabled = zoom === 0;
 
-    React.useEffect(() => {}, [history])
-
     React.useEffect(() => {
         clearTimeout(debounce.current);
         debounce.current = setTimeout(() => { filterDir(value, side) }, 150);

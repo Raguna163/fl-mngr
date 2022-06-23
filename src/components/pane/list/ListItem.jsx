@@ -36,8 +36,7 @@ function ListItem(props) {
                 document.removeEventListener('keyup', selectAll)
             }
         }
-        
-    },[selection.side, item, side, addSelection, itemSelected])
+    },[selection.side, item, side, addSelection, itemSelected]);
 
     function handleClick (e) {
         e.stopPropagation();
