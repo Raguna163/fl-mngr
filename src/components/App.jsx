@@ -12,7 +12,7 @@ function App() {
   React.useEffect(() => {
     let activeSide = event => {
       let contextMenu = document.getElementById("context-menu")
-      if (!event.path.includes(contextMenu)) {
+      if (!event.composedPath.includes(contextMenu)) {
         let side = event.path.includes(document.getElementById('pane-left')) ? 'left' : 'right';
         dispatch({ type: "SIDE_SELECTION", payload: side });
       }
