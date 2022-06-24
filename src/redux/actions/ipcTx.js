@@ -20,21 +20,24 @@ export const fetchDir = (side) => (dispatch, getState) => {
 }
 
 export const copyPath = target => dispatch => {
-    dispatch(sendIpc('copy:clipboard', target))
+    dispatch(sendIpc('copy:clipboard', target));
 }
 
 export const openFile = file => dispatch => {
-    combineDispatch(dispatch,sendIpc('open:file', file))
+    combineDispatch(dispatch,sendIpc('open:file', file));
 }
 
 export const openWith = file => dispatch => {
-    combineDispatch(dispatch,sendIpc('open:with', file))
+    combineDispatch(dispatch,sendIpc('open:with', file));
 }
 
 export const openExplorer = target => dispatch => {
-    combineDispatch(dispatch, sendIpc('open:explorer', target))
+    combineDispatch(dispatch, sendIpc('open:explorer', target));
 }
 
+export const openGit = () => dispatch => {
+    dispatch(sendIpc('open:git'));
+}
 
 export const newItem = (target, name, command) => dispatch => {
     combineDispatch(dispatch,sendIpc('new:item', { target, name, command }));
@@ -43,7 +46,7 @@ export const newItem = (target, name, command) => dispatch => {
 export const deleteItems = pane => (dispatch, getState) => {
     const { selected } = getState().selection;
     const { dir } = getState().directory[pane];
-    combineDispatch(dispatch, sendIpc('delete:items', { selected, dir }))
+    combineDispatch(dispatch, sendIpc('delete:items', { selected, dir }));
 }
 
 export const copyItems = target => (dispatch, getState) => copyOrMove('copy:items', dispatch, getState, target);
@@ -51,7 +54,7 @@ export const moveItems = target => (dispatch, getState) => copyOrMove('move:item
 
 export const renameFile = (oldName, newName, side) => (dispatch, getState) => {
     const { dir } = getState().directory[side];
-    combineDispatch(dispatch, sendIpc('rename:file', { oldName, newName, dir }))
+    combineDispatch(dispatch, sendIpc('rename:file', { oldName, newName, dir }));
 }
 
 export const previewFile = target => dispatch => {
@@ -59,7 +62,7 @@ export const previewFile = target => dispatch => {
 }
 
 export const imageIcon = target => dispatch => {
-    dispatch(sendIpc('img:icon', target))
+    dispatch(sendIpc('img:icon', target));
 }
 
 function copyOrMove(type, dispatch, getState, target) {

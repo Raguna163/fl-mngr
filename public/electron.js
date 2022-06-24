@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, screen } = require('electron');
+const { app, BrowserWindow, ipcMain, screen, shell } = require('electron');
 
 let Window;
 
@@ -72,6 +72,7 @@ async function ipcEventHandlers () {
     ipcMain.on('open:file', FileIPC.openFile);
     ipcMain.on('open:with', FileIPC.openWith);
     ipcMain.on('open:explorer', FileIPC.openExplorer);
+    ipcMain.on('open:git', () => { shell.openExternal("https://github.com/Raguna163/fl-mngr") });
 
     ipcMain.on('read:dir', FileIPC.readDir);
     ipcMain.on('copy:items', FileIPC.copyItems);

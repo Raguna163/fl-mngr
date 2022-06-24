@@ -1,9 +1,10 @@
 import React from 'react';
 import './StatusBar.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useSelector } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
+import { openGit } from '../../redux/actions/ipcTx';
 
-function StatusBar() {
+function StatusBar(props) {
     let selection = useSelector(state => state.selection);
     let itemsSelected = selection.selected.length;
     return (
@@ -11,10 +12,12 @@ function StatusBar() {
         <div>{ 
             itemsSelected > 0 
             ? <span>{itemsSelected} Selected</span> 
-            : <span>Made With <FontAwesomeIcon icon="heart"/></span> 
+            : <span id='git' onClick={props.openGit}>
+                Made With <FontAwesomeIcon icon="heart"/>
+              </span> 
         }</div>
         </footer>
     );
 }
-    
-export default StatusBar;
+
+export default connect(null, { openGit })(StatusBar);
