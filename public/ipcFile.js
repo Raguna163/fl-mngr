@@ -33,6 +33,7 @@ async function copyOrMove(e, { selected, dir, target }, move) {
 async function readDir(event, { dir, side }) {
     const chokidar = require('chokidar');
     if (FSWatcher[side]) FSWatcher[side].close();
+
     try {
         let filenames = await fs.readdir(dir, { withFileTypes: true });
         const [folders, files] = sortFiles(filenames);
@@ -63,7 +64,7 @@ async function copyItems(e, data) { copyOrMove(e, data, false) }
 async function moveItems(e, data) { copyOrMove(e, data, true) }
 
 async function renameFile(e, { oldName, newName, dir }) {
-    fs.rename(path.join(dir, oldName), path.join(dir, newName));
+    fs.rename(path.resolve(dir, oldName), path.resolve(dir, newName));
     e.sender.send('delete', { selection: oldName, otherSide: false });
 }
 async function newItem(e, { target, name, command }) {
