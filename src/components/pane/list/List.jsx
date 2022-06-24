@@ -27,6 +27,8 @@ function List(props) {
         folders = filterResults(folders, props[side].filter);
     }
 
+    let itemCount = files.length + folders.length;
+
     function renderList(items, isFolder) {
         const type = isFolder ? "folder" : "file";
         return items.map((item,idx) => (
@@ -46,7 +48,13 @@ function List(props) {
             )
         );
     }
-    if (folders.length + files.length === 0) {
+    if (itemCount === 0) {
+        let isFiltered = props.filter + props[side].filter
+        if (isFiltered) return (
+            <ul className="list-empty">
+                <span>No search results for "{isFiltered}"</span>
+            </ul> 
+        )
         return (
             <ul className="list-empty">
                 <span>The folder</span>
@@ -59,7 +67,7 @@ function List(props) {
             </ul> 
         );
     }
-    if (splitView && folders.length + files.length) {
+    if (splitView && itemCount > 0) {
         return (
             <div className="split-list">
                 <ul className={`list${grid ? "-grid" : ""}`}>
