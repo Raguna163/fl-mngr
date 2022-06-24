@@ -11,7 +11,7 @@ function Command(props) {
     const { filterDir, command } = props;
     let folderMode = command.includes('>');
     let fileMode = command.includes('.');
-    let pathMode = command.includes('/');
+    let pathMode = command.includes('\\');
     let searchMode = command === "Search";
 
     useEffect(() => {
@@ -30,7 +30,7 @@ function Command(props) {
             props.renameFile(command.substr(folderMode), value.substr(folderMode), props.pane);
         } 
         else if (pathMode) {
-            let target = value.endsWith('/') ? value : value + '/';
+            let target = value.endsWith('\\') ? value : value + '\\';
             props.changeDir(target, props.pane);
         } 
         else if (!searchMode) {
