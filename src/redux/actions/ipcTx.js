@@ -19,6 +19,11 @@ export const fetchDir = (side) => (dispatch, getState) => {
     combineDispatch(dispatch, sendIpc('read:dir', { dir, side }));
 }
 
+export const saveSettings = () => (dispatch, getState) => {
+    const { settings } = getState();
+    dispatch(sendIpc('save:settings', settings));
+}
+
 export const copyPath = target => dispatch => {
     dispatch(sendIpc('copy:clipboard', target));
 }

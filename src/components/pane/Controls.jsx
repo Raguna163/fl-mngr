@@ -67,7 +67,7 @@ function Controls(props) {
                     onBlur={handleBlur}
                 />
             </form>
-            <div className={className.replace('controls','buttons')}>
+            <div className={className.replace('controls','buttons')} onClick={props.saveSettings}>
                 <div>
                     <FontAwesomeIcon
                         className="control-active"

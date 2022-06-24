@@ -16,6 +16,8 @@ const fileOrDir = (files, func) => files.reduce((acc, nxt, idx) => nxt[func]() ?
 
 const sortFiles = filenames => [fileOrDir(filenames, 'isDirectory'), fileOrDir(filenames, 'isFile')]
 
+const getSavedState = async settingsPath => JSON.parse(await fs.readFile(settingsPath));
+
 async function copyOrMove(e, { selected, dir, target }, move) {
     let dirname = path.dirname(target);
     selected.forEach(selection => {
@@ -30,6 +32,13 @@ async function copyOrMove(e, { selected, dir, target }, move) {
     });
 }
 
+async function saveSettings(e, newSettings) {
+    const settingsPath = path.join(process.env.APPDATA, 'fl-mngr', 'state.json');
+    const state = await getSavedState(settingsPath);
+    state.settings = newSettings;
+    fs.writeFile(settingsPath, JSON.stringify(state, null, 2));
+}
+
 async function readDir(event, { dir, side }) {
     const chokidar = require('chokidar');
     if (FSWatcher[side]) FSWatcher[side].close();
@@ -39,7 +48,7 @@ async function readDir(event, { dir, side }) {
         const [folders, files] = sortFiles(filenames);
         event.sender.send('dir:read', { side, files, folders, dir });
         const settingsPath = path.join(process.env.APPDATA, 'fl-mngr', 'state.json');
-        const state = await JSON.parse(await fs.readFile(settingsPath));
+        const state = await getSavedState(settingsPath);
         state.directory[side] = dir;
         fs.writeFile(settingsPath, JSON.stringify(state, null, 2));
     } catch (err) {
@@ -108,6 +117,7 @@ async function imgIcon(e, { target, ID, side }) {
 }
 
 module.exports = {
+    saveSettings,
     readDir,
     openFile,
     openWith,
