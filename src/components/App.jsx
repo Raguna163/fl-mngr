@@ -13,8 +13,10 @@ function App() {
     let activeSide = event => {
       let contextMenu = document.getElementById("context-menu")
       if (!event.composedPath().includes(contextMenu)) {
-        let side = event.composedPath().includes(document.getElementById('pane-left')) ? 'left' : 'right';
-        dispatch({ type: "SIDE_SELECTION", payload: side });
+        let left = event.composedPath().includes(document.getElementById('pane-left'));
+        let right = event.composedPath().includes(document.getElementById('pane-right'));
+        let side = left ? 'left' : right ? 'right' : false;
+        if (side) dispatch({ type: "SIDE_SELECTION", payload: side });
       }
     }
     document.addEventListener('click', activeSide);
