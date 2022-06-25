@@ -53,7 +53,11 @@ $folder-colour: #d4d65a;
     display: flex;
     flex-wrap: wrap;
     align-content: flex-start;
-    justify-content: flex-start;
+    justify-content: space-around;
+    &::after {
+        content: '';
+        flex: auto;
+    }
     hr {
         display: none;
     }
@@ -67,8 +71,6 @@ $folder-colour: #d4d65a;
         span {
             align-self: center;
             text-align: center;
-            // max-width: 125px;
-            max-width: 75%;
         }
         .check-icon {
             position: absolute;
@@ -86,7 +88,7 @@ $folder-colour: #d4d65a;
 .split-list {
     overflow-y: hidden;
     display: flex;
-    flex: 1 1;
+    flex: 1 1 1px;
     height: 100%;
     padding: 5px;
     .list-item {
@@ -155,7 +157,6 @@ $folder-colour: #d4d65a;
         content: '';
         position: absolute;
         top: 0;
-        // transition: all 0.2s cubic-bezier(0.2, 0.5, 0.5, 1.4);
         transition: all 0.15s cubic-bezier(0.1, 0.9, 0.2, 0.8);
         left: 50%;
         top: 50%;
@@ -167,16 +168,12 @@ $folder-colour: #d4d65a;
 }
 
 .img-icon {
-    // width: 150px;
     width: auto;
     display: flex;
     justify-content: center;
     margin: 10px;
     img {
         transition: all 0.1s ease-in-out;
-        // margin: inherit;
-        // max-height: 100px;
-        // max-width: 150px;
         width: auto;
     }
 }
