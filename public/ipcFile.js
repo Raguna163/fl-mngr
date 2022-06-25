@@ -3,6 +3,7 @@ const fs = require('fs').promises;
 const path = require('path');
 const sharp = require('sharp');
 
+const settingsPath = path.join(process.env.APPDATA, 'fl-mngr', 'state.json');
 let FSWatcher = { left: null, right: null };
 const FSOptions = {
     ignored: / (^| [\\/\\])\../,
@@ -33,7 +34,6 @@ async function copyOrMove(e, { selected, dir, target }, move) {
 }
 
 async function saveSettings(e, newSettings) {
-    const settingsPath = path.join(process.env.APPDATA, 'fl-mngr', 'state.json');
     const state = await getSavedState(settingsPath);
     state.settings = newSettings;
     fs.writeFile(settingsPath, JSON.stringify(state, null, 2));
@@ -47,7 +47,6 @@ async function readDir(event, { dir, side }) {
         let filenames = await fs.readdir(dir, { withFileTypes: true });
         const [folders, files] = sortFiles(filenames);
         event.sender.send('dir:read', { side, files, folders, dir });
-        const settingsPath = path.join(process.env.APPDATA, 'fl-mngr', 'state.json');
         const state = await getSavedState(settingsPath);
         state.directory[side] = dir;
         fs.writeFile(settingsPath, JSON.stringify(state, null, 2));
