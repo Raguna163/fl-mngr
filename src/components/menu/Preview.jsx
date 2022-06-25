@@ -1,11 +1,11 @@
 import React from 'react';
 import './Preview.scss';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { preview } from '../../redux/actions/ipcRx';
-import { useState } from 'react';
 
-function Preview({image, preview}) {
-    const [full, setFull] = useState(false)
+function Preview({preview}) {
+    const [full, setFull] = React.useState(false)
+    const image = useSelector(state => state.selection.image);
     if (!image) return null;
     return (
         <div 
@@ -17,8 +17,4 @@ function Preview({image, preview}) {
     );
 }
 
-const mapStateToProps = ({ selection }) => {
-    return { image: selection.image }
-}
-
-export default connect(mapStateToProps, { preview })(Preview);
+export default connect(null, { preview })(Preview);
