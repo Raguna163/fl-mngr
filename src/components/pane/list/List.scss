@@ -86,7 +86,7 @@ $folder-colour: #d4d65a;
 .split-list {
     overflow-y: hidden;
     display: flex;
-    flex: 1 1 1px;
+    flex: 1 1;
     height: 100%;
     padding: 5px;
     .list-item {
@@ -97,9 +97,12 @@ $folder-colour: #d4d65a;
         height: 100%;
         width: inherit;
         min-width: 25%;
-        max-width: 50%;
+        // max-width: 50%;
         &:first-child {
             flex: 0 1 auto;
+        }
+        &:only-child {
+            flex-grow: 1;
         }
         &:hover {
             padding-right: 5px;

@@ -28,6 +28,7 @@ function List(props) {
     }
 
     let itemCount = files.length + folders.length;
+    let listOrGrid = `list${grid ? "-grid" : ""}`
 
     function renderList(items, isFolder) {
         const type = isFolder ? "folder" : "file";
@@ -70,18 +71,14 @@ function List(props) {
     if (splitView && itemCount > 0) {
         return (
             <div className="split-list">
-                <ul className={`list${grid ? "-grid" : ""}`}>
-                    {renderList(folders, true)}
-                </ul>
-                <div className="list-divider"></div>
-                <ul className={`list${grid ? "-grid" : ""}`}>
-                    {renderList(files, false)}
-                </ul>
+                { folders.length !== 0 && <ul className={listOrGrid}> {renderList(folders, true)} </ul> }
+                { (folders.length > 0 && files.length > 0) && <div className="list-divider"></div> }
+                { files.length !== 0 && <ul className={listOrGrid}> {renderList(files, false)} </ul> }
             </div>
         );
     }
     return (
-        <ul className={`list${grid ? "-grid" : ""}`}>
+        <ul className={listOrGrid}>
             {renderList(folders, true)}
             {renderList(files, false)}
         </ul>
