@@ -1,6 +1,10 @@
 #sidebar {
-  // font-family: "Fira Code Retina";
+  font: 14px "Fira Code Retina";
+  min-width: 15%;
   flex: 0;
   padding: 15px;
-    margin: 10px 0 0 1%;
+  margin: 10px 0 0 1%;
+  h4 span {
+    margin: 0 10px;
+  }
 }
