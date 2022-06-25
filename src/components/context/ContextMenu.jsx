@@ -20,8 +20,6 @@ function ContextMenu({closeContext, selected, type, open, pos}) {
     
     return open && (
         <div id="context-menu" onClick={e => e.preventDefault()}>
-            <h4>OPTIONS</h4>
-            <hr />
             <ContextActions multi={selected.length > 1} type={type} />
             { selected.length > 0 && type === "pane" 
               && <ContextActions multi={selected.length > 1} type="folder" />}

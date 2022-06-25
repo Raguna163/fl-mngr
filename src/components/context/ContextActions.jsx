@@ -13,6 +13,8 @@ import {
     openExplorer 
 } from "../../redux/actions/ipcTx";
 
+const zoomValues = [ "x-small", "small", "medium", "larger", "xx-large"]
+
 function ContextActions(props) {
     // React.useEffect(() => {},[props.multi]);
     return Object.values(Menu[props.type]).map((item,idx) => {
@@ -21,7 +23,12 @@ function ContextActions(props) {
         if (!props.multiPane && (title === "Copy" || title === "Move")) return null;
         let arg = argumentReducer(item, props);
         return (
-            <p className="context-actions" key={idx} onClick={() => props[func](arg)}>
+            <p 
+                key={idx} 
+                className="context-actions" 
+                onClick={() => props[func](arg)}
+                style={{ fontSize: zoomValues[props.zoom] }}
+            >
                 <FontAwesomeIcon className="icon" icon={icon} />
                 {title}
             </p>
@@ -31,7 +38,7 @@ function ContextActions(props) {
 
 const mapStateToProps = ({ context, settings }) => {
     const { pane, target } = context;
-    return { pane, target, multiPane: settings.multiPane }
+    return { pane, target, multiPane: settings.multiPane, zoom: settings[pane].zoom }
 }
 
 const mapDispatchToProps = { 

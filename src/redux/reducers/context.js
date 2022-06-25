@@ -8,7 +8,7 @@ import {
 const INITIAL_STATE = {
     command: 'Search',
     sidebar: false,
-    pane: '',
+    pane: 'left',
     target: '', // Full Path to current target
     type: '', // file / folder / pane
     contextOpen: false,
