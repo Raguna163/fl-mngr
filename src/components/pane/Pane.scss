@@ -1,9 +1,8 @@
 #Panes {
   display: flex;
+  margin-top: 1%;
   gap: 1%;
   flex: 1;
-  // height: 20%;
-  padding: 0 1%;
 }
 
 .pane {
@@ -15,7 +14,6 @@
   }
   &:last-child {
       flex: 0 1 100%;
-      // max-width: 75%;
   }
   &-active {
     @extend .pane;

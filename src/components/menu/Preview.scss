@@ -1,20 +1,37 @@
 #preview {
+    padding: 10px;
+    img {
+        width: 100%;
+        transform-origin: bottom left;
+        &:hover {
+            transform: scale(3);
+        }
+    }
+}
+
+#preview-menu {
+    width: auto;
     min-width: 40px;
     max-width: 200px;
     max-height: 77px;
-    width: auto;
     text-align: right;
-    z-index: 20;
     img {
         border-radius: 1px;
         height: 100%;
         max-height: 100px;
         transform-origin: top right;
+        &:hover {
+            transform: scale(5);
+        }
+    }
+}
+
+#preview-menu, #preview {
+    z-index: 20;
+    img {
+        border-radius: 1px;
         transition: all 0.5s ease-in-out;
         border: 1px solid rgba($color: #FFF, $alpha: 0.3);
-        &:hover {
-            transform: scale(7);
-        }
     }
 }
 

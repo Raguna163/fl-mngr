@@ -18,6 +18,16 @@ html, #root, #App, body, #main, #body {
 
 #body {
   display: flex;
+  padding: 1%;
+  gap: 1%;
+}
+
+#side {
+  height: 100%;
+  max-width: 15%;
+  display: flex;
+  flex-direction: column;
+  gap: 1%;
 }
 
 body {

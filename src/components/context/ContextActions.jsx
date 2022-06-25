@@ -48,7 +48,7 @@ const mapDispatchToProps = {
     moveItems, 
     openWith, 
     copyPath, 
-    previewFile,  
+    previewFile,
     openExplorer
 }
 

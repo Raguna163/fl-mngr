@@ -90,7 +90,9 @@ async function deleteItems(e, { selected, dir }) {
 }
 
 async function previewFile(e, target) {
+    // console.log(e.sender);
     sharp(target)
+        .resize({ width: 1920, kernel: sharp.kernel.mitchell, withoutEnlargement: true })
         .jpeg({ quality: 100, chromaSubsampling: '4:4:4' })
         .toBuffer()
         .then(data => e.sender.send('preview', data))

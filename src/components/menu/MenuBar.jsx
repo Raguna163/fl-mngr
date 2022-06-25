@@ -1,15 +1,15 @@
 import React from 'react';
 import './MenuBar.scss';
 import Command from './Command';
-import Preview from './Preview';
 import Settings from './Settings';
+import Preview from '../menu/Preview';
 
 function MenuBar() {
     return (
         <header className="menu-bar segment">
             <Settings/>
             <Command />
-            <Preview side="left"/>
+            <Preview location='menu'/>
         </header>
     );
 }
