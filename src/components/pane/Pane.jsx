@@ -8,15 +8,15 @@ import List from './list/List';
 import Controls from './Controls';
 
 function Pane(props) {
-    const { fetchDir, side, active, multiPane } = props;
+    const { fetchDir, side, active, multiPane, grid } = props;
     const { dir } = props[side];
 
     let className = `pane${active === side ? "-active" : ""} segment`;
     let style = { maxWidth: multiPane ? '75%' : "100%" };
 
     useEffect(() => {
-        fetchDir(side);
-    }, [dir, fetchDir, side]);
+        fetchDir({dir, side, grid});
+    }, [dir, fetchDir, side, grid]);
 
     const handleContext = e => {
         props.openContext({ x: e.pageX, y: e.pageY, target: dir, type: "pane" });
@@ -42,7 +42,12 @@ function Pane(props) {
 const mapStateToProps = ({ directory, selection, settings }) => {
     const { left, right } = directory;
     const { selected, side } = selection;
-    return { left, right, multiPane: settings.multiPane, selected, active: side }
+    return { 
+        left, right, selected, 
+        multiPane: settings.multiPane,
+        grid: settings[side].grid,
+        active: side
+    }
 }
 
 const mapDispatchToProps = { changeDir, fetchDir, openContext, clearSelection, sideSelection, saveSettings }

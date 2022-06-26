@@ -22,9 +22,7 @@ $folder-colour: #d4d65a;
             border: none;
         }
     }
-    span {
-        align-self: center;
-    }
+    
     &-empty {
         @extend .list;
         padding-top: 50px;
@@ -145,6 +143,22 @@ $folder-colour: #d4d65a;
     transition: all 0.1s ease-in-out;
     padding: 8px 5px;
     margin: 5px 0;
+    column-gap: 1%;
+    span {
+        align-self: center;
+    }
+    .item-name {
+        overflow-wrap: break-word;
+    }
+    p {
+        margin: 0 15px 0 auto;
+        overflow-wrap: normal;
+        display: flex;
+        column-gap: 4px;
+        span:last-child {
+            color: #bdf3ff;
+        }
+    }
     &:hover::before {
         left: 0;
         top: 0;

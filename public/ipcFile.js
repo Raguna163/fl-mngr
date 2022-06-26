@@ -13,9 +13,19 @@ const FSOptions = {
     depth: 0
 }
 
-const fileOrDir = (files, func) => files.reduce((acc, nxt, idx) => nxt[func]() ? [...acc, files[idx].name] : acc, []);
+const fileOrDir = (files, func) => files.reduce((acc, nxt, idx) => nxt[func]() ? [...acc, files[idx]] : acc, []);
 
-const sortFiles = filenames => [fileOrDir(filenames, 'isDirectory'), fileOrDir(filenames, 'isFile')]
+const sortFiles = (a, b) => {
+    let RegEx = /^[0-9]+/g;
+    let [aName, bName] = [a.name.toLowerCase(), b.name.toLowerCase()];
+    let [aMatch, bMatch] = [aName.match(RegEx), bName.match(RegEx)];
+    if (aMatch && bMatch) return aMatch - bMatch;
+    if (aName > bName) return 1;
+    if (aName < bName) return -1;
+}
+
+const separateFiles = filenames => [fileOrDir(filenames, 'isDirectory').sort(sortFiles), 
+                                    fileOrDir(filenames, 'isFile').sort(sortFiles)]
 
 const getSavedState = async settingsPath => JSON.parse(await fs.readFile(settingsPath));
 
@@ -39,13 +49,18 @@ async function saveSettings(e, newSettings) {
     fs.writeFile(settingsPath, JSON.stringify(state, null, 2));
 }
 
-async function readDir(event, { dir, side }) {
+async function readDir(event, { dir, side, grid }) {
     const chokidar = require('chokidar');
     if (FSWatcher[side]) FSWatcher[side].close();
 
     try {
         let filenames = await fs.readdir(dir, { withFileTypes: true });
-        const [folders, files] = sortFiles(filenames);
+        if (!grid) {
+            const fileStats = filenames.map(filename => fs.lstat(path.join(dir, filename.name)));
+            const stats = await Promise.all(fileStats);
+            filenames.forEach((file, idx) => file.size = stats[idx].size ?? 0);
+        }
+        const [folders, files] = separateFiles(filenames);
         event.sender.send('dir:read', { side, files, folders, dir });
         const state = await getSavedState(settingsPath);
         state.directory[side] = dir;

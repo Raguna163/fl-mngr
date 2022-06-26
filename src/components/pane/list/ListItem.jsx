@@ -17,12 +17,24 @@ const zoomValues = [
     ["xx-large", "30%"]
 ]
 
+const GB = 1073741824;
+const MB = 1048576;
+const KB = 1024;
+const formatSize = size => {
+	if (size > GB) return [parseFloat((size / GB).toFixed(2)),"GB"]
+	if (size > MB) return [parseFloat((size / MB).toFixed(2)),"MB"]
+	if (size > KB) return [parseFloat((size / KB).toFixed(2)),"KB"]
+	if (size > 0) return [size,"B"]
+	return ''
+}
+
 function ListItem(props) {
     const { selection, item, side, target, addSelection } = props;
     const itemSelected = selection.selected.includes(item) && side === selection.side;
 
     const { zoom } = props[side];
     const [ fontSize, minWidth ] = zoomValues[zoom];
+    const size = formatSize(props.size);
 
     React.useEffect(() => {
         if (side === selection.side) {
@@ -64,7 +76,8 @@ function ListItem(props) {
         <>
             <li onClick={handleClick} onContextMenu={handleContext} className="list-item" style={{ fontSize, minWidth }}>
                 {props.fileIcon}
-                <span>{item}</span>
+                <span className='item-name'>{item}</span>
+                { !props.isFolder && size && <p><span>{size[0]}</span> <span>{size[1]}</span></p> }
                 {itemSelected && props.checkIcon}
             </li>
             <hr/>
