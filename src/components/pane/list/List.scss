@@ -1,5 +1,6 @@
 $border-colour: rgba(255,255,255,0.2);
 $folder-colour: #d4d65a;
+$file-colour: #bdf3ff;
 
 .list {
     font-family: "Fira Code";
@@ -59,6 +60,7 @@ $folder-colour: #d4d65a;
     hr {
         display: none;
     }
+    
     .list-item {
         flex-direction: column;
         align-self: center;
@@ -66,9 +68,19 @@ $folder-colour: #d4d65a;
         max-width: 30%;
         min-width: 10%;
         padding: 5px 10px;
+        .item-name {
+            overflow-wrap: anywhere;
+            color: white !important;
+        }
+        p {
+            margin: auto;
+        }
         span {
             align-self: center;
             text-align: center;
+            &:last-child {
+                color: $file-colour;
+            }
         }
         .check-icon {
             position: absolute;
@@ -121,7 +133,7 @@ $folder-colour: #d4d65a;
 }
 
 .folder-icon {
-    color: #d4d65a;
+    color: $folder-colour;
     margin: 0 10px; 
 }
 
@@ -156,7 +168,7 @@ $folder-colour: #d4d65a;
         display: flex;
         column-gap: 4px;
         span:last-child {
-            color: #bdf3ff;
+            color: $file-colour;
         }
     }
     &:hover::before {

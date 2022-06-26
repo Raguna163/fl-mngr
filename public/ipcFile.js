@@ -49,19 +49,19 @@ async function saveSettings(e, newSettings) {
     fs.writeFile(settingsPath, JSON.stringify(state, null, 2));
 }
 
-async function readDir(event, { dir, side, grid }) {
+async function readDir(event, { dir, side }) {
     const chokidar = require('chokidar');
     if (FSWatcher[side]) FSWatcher[side].close();
 
     try {
         let filenames = await fs.readdir(dir, { withFileTypes: true });
-        if (!grid) {
-            const fileStats = filenames.map(filename => fs.lstat(path.join(dir, filename.name)));
-            const stats = await Promise.all(fileStats);
-            filenames.forEach((file, idx) => file.size = stats[idx].size ?? 0);
-        }
+        const fileStats = filenames.map(filename => fs.lstat(path.join(dir, filename.name)));
+        const stats = await Promise.all(fileStats);
+
+        filenames.forEach((file, idx) => file.size = stats[idx].size ?? 0);
         const [folders, files] = separateFiles(filenames);
         event.sender.send('dir:read', { side, files, folders, dir });
+
         const state = await getSavedState(settingsPath);
         state.directory[side] = dir;
         fs.writeFile(settingsPath, JSON.stringify(state, null, 2));
