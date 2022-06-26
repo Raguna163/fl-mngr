@@ -43,13 +43,13 @@ process.once('loaded', () => {
                 sidebar: false,
                 thumbnails: true,
                 left: {
-                    splitView: false,
-                    grid: true,
+                    splitView: true,
+                    grid: false,
                     zoom: 1
                 },
                 right: {
-                    splitView: true,
-                    grid: false,
+                    splitView: false,
+                    grid: true,
                     zoom: 1
                 }
             }
