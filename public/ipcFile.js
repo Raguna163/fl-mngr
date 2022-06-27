@@ -64,7 +64,6 @@ async function readDir(event, { dir, side }) {
         let filenames = await fs.readdir(dir, { withFileTypes: true });
         const fileStats = filenames.map(filename => fs.lstat(path.join(dir, filename.name)));
         let stats = await Promise.allSettled(fileStats);
-        console.log(stats); 
         filenames.forEach((file, idx) => {
             const { status, value } = stats[idx];
             if (status !== 'rejected') file.size = value.size ?? 0
