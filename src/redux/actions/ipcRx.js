@@ -1,5 +1,6 @@
 import { 
     READ_DIRECTORY, 
+    GET_DRIVES,
     UPDATE_DIRECTORY,
     ADD_TO_DIRECTORY,
     REMOVE_FROM_DIRECTORY,
@@ -22,6 +23,10 @@ function Uint8ToBase64(u8Arr) {
 
 export const readDir = (e, data) => {
     return { type: READ_DIRECTORY, payload: data }
+}
+
+export const getDrives = (e, data) => {
+    return { type: GET_DRIVES, payload: data }
 }
 
 export const updateDir = (e, data) => {

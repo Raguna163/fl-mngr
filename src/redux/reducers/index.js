@@ -4,7 +4,7 @@ import directoryReducer from './directory';
 import contextReducer from './context';
 import selectionReducer from './selection';
 import settingsReducer from './settings';
-import { readDir, updateDir, addToDir, removeFromDir, preview } from '../actions/ipcRx';
+import { readDir, updateDir, addToDir, removeFromDir, preview, getDrives } from '../actions/ipcRx';
 
 const reducers = combineReducers({
     directory: directoryReducer,
@@ -15,6 +15,7 @@ const reducers = combineReducers({
 
 const IPC = window.ipc.createIpc({
     'dir:read': readDir,
+    'drives:read': getDrives,
     'file:renamed': updateDir,
     'new': addToDir,
     'delete': removeFromDir,

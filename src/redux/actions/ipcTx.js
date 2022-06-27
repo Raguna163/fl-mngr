@@ -18,6 +18,10 @@ export const fetchDir = data => dispatch => {
     combineDispatch(dispatch, sendIpc('read:dir', data));
 }
 
+export const fetchDrives = () => dispatch => {
+    dispatch(sendIpc('read:drives'));
+}
+
 export const saveSettings = () => (dispatch, getState) => {
     const { settings } = getState();
     dispatch(sendIpc('save:settings', settings));

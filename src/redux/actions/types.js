@@ -1,5 +1,6 @@
 // Directory action types
 export const READ_DIRECTORY = "READ_DIRECTORY";
+export const GET_DRIVES = "GET_DRIVES";
 export const UPDATE_DIRECTORY = "UPDATE_DIRECTORY";
 export const ADD_TO_DIRECTORY = "ADD_TO_DIRECTORY";
 export const REMOVE_FROM_DIRECTORY = "REMOVE_FROM_DIRECTORY";

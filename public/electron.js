@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, screen, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, screen, shell, dialog } = require('electron');
 
 let Window;
 
@@ -26,10 +26,15 @@ async function createWindow(x,y) {
     if (require('electron-is-dev')) {
         Window.loadURL("http://localhost:3000");
         // React Devtools
-        let extFolder = "fmkadmapgofadopljbjfkapdkoienihi";
-        let extVersion = "4.24.7_0"
-        let reactDevToolsPath = `Google\\Chrome\\User Data\\Default\\Extensions\\${extFolder}\\${extVersion}`
-        Window.webContents.session.loadExtension(path.join(process.env.LOCALAPPDATA, reactDevToolsPath));
+        try {
+            let extFolder = "fmkadmapgofadopljbjfkapdkoienihi";
+            let extVersion = "4.24.7_0"
+            let reactDevToolsPath = `Google\\Chrome\\User Data\\Default\\Extensions\\${extFolder}\\${extVersion}`
+            Window.webContents.session.loadExtension(path.join(process.env.LOCALAPPDATA, reactDevToolsPath));
+        } catch (err) {
+            console.log("Error loading react devtools:");
+            console.log(err);
+        }
     } else {
         Window.loadURL(require('url').format({
             pathname: path.join(__dirname, '/../build/index.html'),
@@ -53,6 +58,10 @@ app.on('window-all-closed', () => app.quit());
 async function ipcEventHandlers () {
     const FileIPC = require('./ipcFile');
     const { copy } = require('copy-paste');
+
+    dialog.showErrorBox = (title, content) => { console.log(`${title}\n${content}`) }
+    process.on('uncaughtException', err => console.log(err));
+
     ipcMain.on('window:control', (e, type) => {
         switch (type) {
             case "compress":
@@ -76,6 +85,8 @@ async function ipcEventHandlers () {
     
     ipcMain.on('save:settings', FileIPC.saveSettings);
     ipcMain.on('read:dir', FileIPC.readDir);
+    ipcMain.on('read:drives', FileIPC.getDrives);
+
     ipcMain.on('copy:items', FileIPC.copyItems);
     ipcMain.on('move:items', FileIPC.moveItems);
     ipcMain.on('rename:file', FileIPC.renameFile);

@@ -1,5 +1,6 @@
 import {
     READ_DIRECTORY,
+    GET_DRIVES,
     CHANGE_DIRECTORY,
     FILTER_DIRECTORY,
     ADD_TO_DIRECTORY,
@@ -11,6 +12,7 @@ import {
 let SAVED_STATE = window.initialState.directory;
 
 const INITIAL_STATE = {
+    drives: [],
     left: {
         dir: SAVED_STATE.left,
         files: [],
@@ -46,6 +48,8 @@ export default (state = INITIAL_STATE, { payload, type }) => {
                     files, folders, dir
                 }
             }
+        case GET_DRIVES:
+            return { ...state, drives: [...payload] }
         case CHANGE_DIRECTORY:
             let { history } = state[payload.side]
             return { 

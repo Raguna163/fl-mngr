@@ -49,16 +49,26 @@ async function saveSettings(e, newSettings) {
     fs.writeFile(settingsPath, JSON.stringify(state, null, 2));
 }
 
+async function getDrives(e) {
+    const nodeDiskInfo = require('node-disk-info');
+    nodeDiskInfo
+        .getDiskInfo()
+        .then(disks => e.sender.send('drives:read', disks))
+        .catch(err => console.log(err));
+}
+
 async function readDir(event, { dir, side }) {
     const chokidar = require('chokidar');
     if (FSWatcher[side]) FSWatcher[side].close();
-
     try {
         let filenames = await fs.readdir(dir, { withFileTypes: true });
         const fileStats = filenames.map(filename => fs.lstat(path.join(dir, filename.name)));
-        const stats = await Promise.all(fileStats);
-
-        filenames.forEach((file, idx) => file.size = stats[idx].size ?? 0);
+        let stats = await Promise.allSettled(fileStats);
+        console.log(stats); 
+        filenames.forEach((file, idx) => {
+            const { status, value } = stats[idx];
+            if (status !== 'rejected') file.size = value.size ?? 0
+        });
         const [folders, files] = separateFiles(filenames);
         event.sender.send('dir:read', { side, files, folders, dir });
 
@@ -134,6 +144,7 @@ async function imgIcon(e, { target, ID, side }) {
 
 module.exports = {
     saveSettings,
+    getDrives,
     readDir,
     openFile,
     openWith,
