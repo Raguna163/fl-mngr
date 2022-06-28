@@ -84,6 +84,7 @@ async function ipcEventHandlers () {
     ipcMain.on('open:git', () => { shell.openExternal("https://github.com/Raguna163/fl-mngr") });
     
     ipcMain.on('save:settings', FileIPC.saveSettings);
+    ipcMain.on('edit:fave', FileIPC.editFavourites);
     ipcMain.on('read:dir', FileIPC.readDir);
     ipcMain.on('read:drives', FileIPC.getDrives);
 

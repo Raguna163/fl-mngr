@@ -10,13 +10,13 @@ import {
     openWith, 
     copyPath, 
     previewFile, 
-    openExplorer 
+    openExplorer,
+    editFavourites
 } from "../../redux/actions/ipcTx";
 
 const zoomValues = [ "x-small", "small", "medium", "larger", "xx-large"]
 
 function ContextActions(props) {
-    // React.useEffect(() => {},[props.multi]);
     return Object.values(Menu[props.type]).map((item,idx) => {
         let { icon, title, func } = item;
         if (props.multi ? props.multi !== func.endsWith('s') : false) return null;
@@ -49,7 +49,8 @@ const mapDispatchToProps = {
     openWith, 
     copyPath, 
     previewFile,
-    openExplorer
+    openExplorer,
+    editFavourites
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ContextActions);

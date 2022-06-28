@@ -49,6 +49,14 @@ async function saveSettings(e, newSettings) {
     fs.writeFile(settingsPath, JSON.stringify(state, null, 2));
 }
 
+async function editFavourites(e, data) {
+    const state = await getSavedState(settingsPath);
+    // if (data.delete) {}
+    state.directory.favourites.push({ name: path.basename(data), path: data });
+    e.sender.send('update:fave', state.directory.favourites);
+    fs.writeFile(settingsPath, JSON.stringify(state, null, 2));
+}
+
 async function getDrives(e) {
     const nodeDiskInfo = require('node-disk-info');
     nodeDiskInfo
@@ -143,6 +151,7 @@ async function imgIcon(e, { target, ID, side }) {
 
 module.exports = {
     saveSettings,
+    editFavourites,
     getDrives,
     readDir,
     openFile,

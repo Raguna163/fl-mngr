@@ -73,6 +73,10 @@ export const imageIcon = target => dispatch => {
     dispatch(sendIpc('img:icon', target));
 }
 
+export const editFavourites = data => dispatch => {
+    dispatch(sendIpc('edit:fave', data));
+}
+
 function copyOrMove(type, dispatch, getState, target) {
     const { selected, side } = getState().selection;
     const { pane } = getState().context;

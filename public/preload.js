@@ -36,7 +36,8 @@ process.once('loaded', () => {
         initialState = {
             directory: {
                 left: homePath,
-                right: homePath
+                right: homePath,
+                favourites: []
             },
             settings: {
                 multiPane: true,

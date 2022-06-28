@@ -2,18 +2,26 @@
   font: 14px "Fira Code Retina";
   flex: 0;
   flex-grow: 1;
-  padding: 15px;
+  padding: 10px;
   h4 span {
     margin: 0 10px;
   }
 }
 
-#drives {
+#drives, #faves {
   ul {
-    padding: 0 10px;
+    padding: 0 5px;
+    margin: 10px auto;
     list-style: none;
+    li {
+      margin: 5px auto;
+      cursor: pointer;
+      &:hover {
+        font-weight: bold;
+      }
+    }
   }
   span {
-    margin: 0 10px; 
+    margin: 0 4%; 
   }
 }

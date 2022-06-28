@@ -1,6 +1,7 @@
 import { 
     READ_DIRECTORY, 
     GET_DRIVES,
+    UPDATE_FAVOURITES,
     UPDATE_DIRECTORY,
     ADD_TO_DIRECTORY,
     REMOVE_FROM_DIRECTORY,
@@ -27,6 +28,10 @@ export const readDir = (e, data) => {
 
 export const getDrives = (e, data) => {
     return { type: GET_DRIVES, payload: data }
+}
+
+export const updateFavourites = (e, data) => {
+    return { type: UPDATE_FAVOURITES , payload: data }
 }
 
 export const updateDir = (e, data) => {

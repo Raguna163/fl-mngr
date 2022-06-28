@@ -4,10 +4,11 @@ import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Preview from '../menu/Preview';
 import Drives from "./list/Drives";
+import Fave from "./list/Fave";
 
 function SideBar() {
     let show = useSelector(({settings}) => settings.sidebar);
-    let [ driveState, toggleDrives ] = React.useState(true);
+    let [ driveState, toggleDrives ] = React.useState(false);
     let [ faveState, toggleSave ] = React.useState(true);
     return show && (
         <div id='side'>
@@ -18,7 +19,7 @@ function SideBar() {
                     <span>Fave</span>
                     <FontAwesomeIcon icon={`chevron-${faveState ? 'up' : 'down'}`}/>
                 </h4>
-                { faveState && <p></p> }
+                { faveState && <Fave/> }
                 <h4 onClick={() => toggleDrives(!driveState)}>
                     <FontAwesomeIcon icon="hard-drive"/>
                     <span>Drives</span>

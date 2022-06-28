@@ -34,6 +34,12 @@ export default {
             title: 'Open In Explorer',
             func: 'openExplorer',
             arg: 'target'
+        },
+        addFavourite: {
+            icon: 'star',
+            title: 'Add Fave',
+            func: 'editFavourites',
+            arg: 'target'
         }
     },
     file: {
