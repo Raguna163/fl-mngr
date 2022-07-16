@@ -1,4 +1,6 @@
 const { app, BrowserWindow, ipcMain, screen, shell, dialog } = require('electron');
+const extFolder = "fmkadmapgofadopljbjfkapdkoienihi";
+const extVersion = "4.25.0_0"
 
 let Window;
 
@@ -27,8 +29,6 @@ async function createWindow(x,y) {
         Window.loadURL("http://localhost:3000");
         // React Devtools
         try {
-            let extFolder = "fmkadmapgofadopljbjfkapdkoienihi";
-            let extVersion = "4.24.7_0"
             let reactDevToolsPath = `Google\\Chrome\\User Data\\Default\\Extensions\\${extFolder}\\${extVersion}`
             Window.webContents.session.loadExtension(path.join(process.env.LOCALAPPDATA, reactDevToolsPath));
         } catch (err) {
