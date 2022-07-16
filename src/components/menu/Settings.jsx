@@ -1,7 +1,8 @@
 import React from 'react';
 import '../pane/Controls.scss'
-import { connect } from 'react-redux';
+import Tooltip from '../context/Tooltip';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { connect } from 'react-redux';
 import { toggleMultiPane, toggleSidebar, toggleThumbs } from '../../redux/actions';
 import { saveSettings } from '../../redux/actions/ipcTx';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,22 +18,35 @@ function Settings(props) {
         setSidebarState(1 - sidebarState);
     }
     return (
-        <div className="settings">
+        <div className='settings'>
             <div className='pane-buttons' onClick={props.saveSettings}>
-                <FontAwesomeIcon className='control-active' 
-                    onClick={toggleSidebar}
-                    icon={States[sidebarState].icon}
-                    rotation={States[sidebarState].rotate}
-                />
-                <FontAwesomeIcon className='control-active' icon="columns" onClick={props.toggleMultiPane} />
-                <span 
-                    className="fa-layers fa-fw control-active" 
-                    onClick={props.toggleThumbs}
-                    style={{ margin: "auto 3px", padding: "10px 5px" }}
-                >
-                    <FontAwesomeIcon icon="image"/>
-                    {!settings.thumbnails && <FontAwesomeIcon icon="slash" color='red'/>}
-                </span>
+                <Tooltip content='Sidebar' pos='bottom'>
+                    <FontAwesomeIcon
+                        className='control-active'
+                        onClick={toggleSidebar}
+                        icon={States[sidebarState].icon}
+                        rotation={States[sidebarState].rotate}
+                    />
+                </Tooltip>
+                <Tooltip content='Multipane' pos='bottom'>
+                    <FontAwesomeIcon
+                        className='control-active'
+                        icon='columns'
+                        onClick={props.toggleMultiPane}
+                    />
+                </Tooltip>
+                <Tooltip content='Thumbnails' pos='bottom'>
+                    <span
+                        className='fa-layers fa-fw control-active'
+                        onClick={props.toggleThumbs}
+                        style={{ margin: "auto 3px", padding: "10px 5px" }}
+                    >
+                        <FontAwesomeIcon icon='image' />
+                        {!settings.thumbnails && (
+                            <FontAwesomeIcon icon='slash' color='red' />
+                        )}
+                    </span>
+                </Tooltip>
             </div>
         </div>
     );

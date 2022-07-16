@@ -1,0 +1,29 @@
+$tooltip-margin: -30px;
+
+.Tooltip-Wrapper {
+  display: inline-block;
+  position: relative;
+}
+
+.Tooltip {
+  position: absolute;
+  border-radius: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px;
+  background: rgba($color: #FFF, $alpha: 0.3);
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 1;
+  z-index: 1000;
+  white-space: nowrap;
+  &-top, &-bottom {
+    @extend .Tooltip;
+  }
+  &-top {
+    top: $tooltip-margin;
+  }
+  &-bottom {
+    bottom: $tooltip-margin;
+  }
+}

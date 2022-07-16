@@ -1,5 +1,6 @@
 import React from 'react';
 import './TitleBar.scss';
+import Tooltip from '../context/Tooltip';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const { send } = window.ipc;
 
@@ -47,28 +48,36 @@ function TitleBar() {
     }
 
     return (
-        <div className="title-bar">
+        <div className='title-bar'>
             <span>
-                <FontAwesomeIcon icon="folder" />
+                <FontAwesomeIcon icon='folder' />
             </span>
-            <span className="title-bar-title">F L - M N G R</span>
-            <div className="title-bar-controls">
-                <FontAwesomeIcon 
-                    icon="window-minimize" 
-                    onClick={()=> windowControl('minimize') }
-                />
-                <FontAwesomeIcon 
-                    icon={`window-${isMax}`} 
-                    onClick={()=> windowControl(isMax) }
-                />
-                <FontAwesomeIcon 
-                    icon={isFullscreen} 
-                    onClick={()=> windowControl(isFullscreen) }
-                />
-                <FontAwesomeIcon 
-                    icon="window-close" 
-                    onClick={()=> windowControl('close') }
-                />
+            <span className='title-bar-title'>F L - M N G R</span>
+            <div className='title-bar-controls'>
+                <Tooltip content="Minimize" pos='bottom'>
+                    <FontAwesomeIcon
+                        icon='window-minimize'
+                        onClick={() => windowControl("minimize")}
+                    />
+                </Tooltip>
+                <Tooltip content="Maximize" pos='bottom'>
+                    <FontAwesomeIcon
+                        icon={`window-${isMax}`}
+                        onClick={() => windowControl(isMax)}
+                    />
+                </Tooltip>
+                <Tooltip content="Fullscreen" pos='bottom'>
+                    <FontAwesomeIcon
+                        icon={isFullscreen}
+                        onClick={() => windowControl(isFullscreen)}
+                    />
+                </Tooltip>
+                <Tooltip content="Close" pos='bottom'>
+                    <FontAwesomeIcon
+                        icon='window-close'
+                        onClick={() => windowControl("close")}
+                    />
+                </Tooltip>
             </div>
         </div>
     );

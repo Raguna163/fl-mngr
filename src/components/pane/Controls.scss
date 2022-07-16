@@ -35,9 +35,6 @@
     .control-inactive {
         cursor: default;
     }
-    div {
-        position: relative;
-    }
     &-left, &-right {
         @extend .pane-buttons;
     }
