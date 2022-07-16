@@ -13,7 +13,7 @@ import {
 let SAVED_STATE = window.initialState.directory;
 
 const INITIAL_STATE = {
-    drives: [],
+    drives: SAVED_STATE.drives,
     favourites: SAVED_STATE.favourites,
     left: {
         dir: SAVED_STATE.left,

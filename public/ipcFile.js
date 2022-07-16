@@ -2,13 +2,15 @@ const { exec } = require('child_process');
 const fs = require('fs').promises;
 const path = require('path');
 const sharp = require('sharp');
+const nodeDiskInfo = require('node-disk-info');
+
 
 const settingsPath = path.join(process.env.APPDATA, 'fl-mngr', 'state.json');
 let FSWatcher = { left: null, right: null };
 const FSOptions = {
     ignored: / (^| [\\/\\])\../,
     ignoreInitial: true,
-    // awaitWriteFinish: true,
+    awaitWriteFinish: true,
     followSymlinks: false,
     depth: 0
 }
@@ -29,6 +31,8 @@ const separateFiles = filenames => [fileOrDir(filenames, 'isDirectory').sort(sor
 
 const getSavedState = async settingsPath => JSON.parse(await fs.readFile(settingsPath));
 
+const setSavedState = async state => fs.writeFile(settingsPath, JSON.stringify(state, null, 2));
+
 async function copyOrMove(e, { selected, dir, target }, move) {
     let dirname = path.dirname(target);
     selected.forEach(selection => {
@@ -46,22 +50,29 @@ async function copyOrMove(e, { selected, dir, target }, move) {
 async function saveSettings(e, newSettings) {
     const state = await getSavedState(settingsPath);
     state.settings = newSettings;
-    fs.writeFile(settingsPath, JSON.stringify(state, null, 2));
+    await setSavedState(state);
 }
 
 async function editFavourites(e, data) {
     const state = await getSavedState(settingsPath);
-    // if (data.delete) {}
-    state.directory.favourites.push({ name: path.basename(data), path: data });
+    const { favourites } = state.directory;
+    const index = favourites.findIndex(entry => entry.path === data);
+    state.directory.favourites = index === -1
+        ? [...favourites, { name: path.basename(data), path: data }]
+        : [...favourites.slice(0, index), ...favourites.slice(index + 1)];
     e.sender.send('update:fave', state.directory.favourites);
-    fs.writeFile(settingsPath, JSON.stringify(state, null, 2));
+    await setSavedState(state);
 }
 
 async function getDrives(e) {
-    const nodeDiskInfo = require('node-disk-info');
     nodeDiskInfo
         .getDiskInfo()
-        .then(disks => e.sender.send('drives:read', disks))
+        .then(async disks => {
+            e.sender.send('drives:read', disks);
+            const state = await getSavedState(settingsPath);
+            state.directory.drives = disks;
+            await setSavedState(state);
+        })
         .catch(err => console.log(err));
 }
 
@@ -81,7 +92,7 @@ async function readDir(event, { dir, side }) {
 
         const state = await getSavedState(settingsPath);
         state.directory[side] = dir;
-        fs.writeFile(settingsPath, JSON.stringify(state, null, 2));
+        await setSavedState(state);
     } catch (err) {
         console.log(err);
     }

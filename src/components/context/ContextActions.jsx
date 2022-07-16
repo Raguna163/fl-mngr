@@ -22,6 +22,8 @@ function ContextActions(props) {
         if (props.multi ? props.multi !== func.endsWith('s') : false) return null;
         if (!props.multiPane && (title === "Copy" || title === "Move")) return null;
         let arg = argumentReducer(item, props);
+        let alreadyFave = props.faves.some(e => e.path === arg);
+        if (title === "Add Fave" && alreadyFave) title = title.replace("Add", "Delete");
         return (
             <p 
                 key={idx} 
@@ -36,9 +38,10 @@ function ContextActions(props) {
     });
 }
 
-const mapStateToProps = ({ context, settings }) => {
+const mapStateToProps = ({ context, settings, directory }) => {
     const { pane, target } = context;
-    return { pane, target, multiPane: settings.multiPane, zoom: settings[pane].zoom }
+    const { zoom } = settings[pane];
+    return { pane, target, zoom, multiPane: settings.multiPane, faves: directory.favourites }
 }
 
 const mapDispatchToProps = { 

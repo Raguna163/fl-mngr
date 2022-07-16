@@ -10,6 +10,8 @@ export function argumentReducer(item, props) {
         case "folder":
             let target = props.target.split("/");
             return item.arg === "folder" ? ">" : "" + target[target.length - 1]
+        case "fave":
+            return item;
         default:
             return item.arg;
     }
@@ -126,6 +128,20 @@ export default {
             title: "Paste",
             func: "pasteText",
             arg: "target"
+        }
+    },
+    fave: {
+        deleteFave: {
+            icon: 'star',
+            title: "Delete Fave",
+            func: 'editFavourites',
+            arg: 'target'
+        },
+        copyPath: {
+            icon: 'clipboard',
+            title: 'Copy Path',
+            func: 'copyPath',
+            arg: 'target'
         }
     }
 }

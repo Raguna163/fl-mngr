@@ -8,7 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 function Drives(props) {
     React.useEffect(props.fetchDrives,[props.fetchDrives]);
     function renderList(drives) {
-        return drives.map((drive,idx) => (
+        if (!drives) return <p>Loading...</p>
+        else return drives.map((drive,idx) => (
               <li 
                 onClick={() => props.changeDir(drive._mounted + "\\", props.activeSide)}
                 key={idx}
