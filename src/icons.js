@@ -98,7 +98,7 @@ export default [
 export function addIcon(type, item) {
     if (type === "folder") return type;
     let basename = item.split('.');
-    const ext = basename[basename.length - 1];
+    const ext = basename[basename.length - 1].toLowerCase();
     switch (ext) {
         case 'mp3':
         case 'wav':

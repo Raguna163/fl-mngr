@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain, screen, shell, dialog } = require('electron');
 const extFolder = "fmkadmapgofadopljbjfkapdkoienihi";
-const extVersion = "4.25.0_0"
+const extVersion = "4.25.0_0";
 
 let Window;
 
