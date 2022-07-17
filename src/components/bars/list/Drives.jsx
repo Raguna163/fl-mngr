@@ -9,17 +9,30 @@ function Drives(props) {
     React.useEffect(props.fetchDrives,[props.fetchDrives]);
     function renderList(drives) {
         if (!drives) return <p>Loading...</p>
-        else return drives.map((drive,idx) => (
-              <li 
-                onClick={() => props.changeDir(drive._mounted + "\\", props.activeSide)}
+        else return drives.map((drive, idx) => (
+            <li
+                onClick={() =>
+                    props.changeDir(drive._mounted + "\\", props.activeSide)
+                }
                 key={idx}
-              >
-                <FontAwesomeIcon icon='hard-drive'/>
+            >
+                <FontAwesomeIcon icon='hard-drive' />
                 <span>{drive._mounted}\</span>
                 <span>{drive._capacity}</span>
-              </li>
-            )
-        );
+                <div className='progress'>
+                    <span
+                        style={{
+                            width: drive._capacity,
+                            backgroundColor:
+                                parseInt(drive._capacity) > 80
+                                    ? "#b33d3d"
+                                    : "#70e7a6",
+                        }}
+                    ></span>
+                    <span></span>
+                </div>
+            </li>
+        ));
     }
     return (
         <div id='drives'>

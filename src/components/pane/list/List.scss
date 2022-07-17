@@ -1,6 +1,7 @@
 $border-colour: rgba(255,255,255,0.2);
 $folder-colour: #d4d65a;
 $file-colour: #bdf3ff;
+$check-color: #70e7a6;
 
 .list {
     font-family: "Fira Code";
@@ -142,7 +143,7 @@ $file-colour: #bdf3ff;
 }
 
 .check-icon {
-    color: #70e7a6;
+    color: $check-color;
     float: right;
     margin-right: 10px;
     margin-left: auto;

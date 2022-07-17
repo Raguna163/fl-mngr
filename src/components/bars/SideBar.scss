@@ -11,17 +11,39 @@
 #drives, #faves {
   ul {
     padding: 0 5px;
-    margin: 10px auto;
+    margin: 5px auto;
     list-style: none;
     li {
-      margin: 5px auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      margin: 10px auto;
       cursor: pointer;
       &:hover {
         font-weight: bold;
+      }
+      .progress {
+        width: 100%;
+        position: relative;
+        margin: 3px auto;
+        span {
+          width: 100%;
+          height: 5px;
+          background-color: grey;
+          position: absolute;
+          &:first-of-type {
+            z-index: 100;
+          }
+        }
       }
     }
   }
   span {
     margin: 0 4%; 
   }
+}
+
+#faves ul li {
+  display: block;
+  margin: 5px auto;
 }
