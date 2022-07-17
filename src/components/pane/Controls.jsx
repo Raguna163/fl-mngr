@@ -40,7 +40,7 @@ function Controls(props) {
 
     function handleChange(e) {
         const { folders, files } = props[side]
-        let result = [...folders, ...files].find(item => item.toLowerCase().includes(e.target.value.toLowerCase()));
+        let result = [...folders, ...files].find(item => item.name.toLowerCase().includes(e.target.value.toLowerCase()));
         if (result) {
             setColour("white");
             lastMatch.current = e.target.value;
@@ -59,7 +59,9 @@ function Controls(props) {
     return (
         <div className={className}>
             <form onSubmit={e => e.preventDefault()}>
+                <label htmlFor="filter">{value}</label>
                 <input
+                    name='filter'
                     spellCheck='false'
                     style={{ color: colour }}
                     placeholder='Filter...'

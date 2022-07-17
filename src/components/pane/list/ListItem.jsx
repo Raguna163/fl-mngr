@@ -29,7 +29,7 @@ const formatSize = size => {
 }
 
 function ListItem(props) {
-    const { selection, item, side, target, addSelection } = props;
+    const { selection, item, side, target, addSelection, isFiltered } = props;
     const itemSelected = selection.selected.includes(item) && side === selection.side;
 
     const { zoom } = props[side];
@@ -37,7 +37,7 @@ function ListItem(props) {
     const size = formatSize(props.size);
 
     React.useEffect(() => {
-        if (side === selection.side) {
+        if (side === selection.side && !isFiltered) {
             let selectAll = e => {
                 if (e.ctrlKey && e.key === "a" && !itemSelected) {
                     addSelection(item, side);
@@ -48,7 +48,7 @@ function ListItem(props) {
                 document.removeEventListener('keyup', selectAll)
             }
         }
-    },[selection.side, item, side, addSelection, itemSelected]);
+    },[selection.side, item, side, addSelection, itemSelected, isFiltered]);
 
     function handleClick (e) {
         e.stopPropagation();

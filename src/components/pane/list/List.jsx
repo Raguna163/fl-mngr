@@ -14,7 +14,10 @@ function List(props) {
     let { files, folders } = props[side];
 
     function filterResults(items, filter) {
-        return items.filter(item => item.name.toLowerCase().includes(filter));
+        return items.filter(item => {
+            let itemName = item.name ?? item;
+            return itemName.toLowerCase().includes(filter);
+        });
     }
 
     if (props.filter) {
@@ -35,19 +38,28 @@ function List(props) {
         return items.map((item,idx) => {
             let itemName = item.name ?? item;
             return (
-                <ListItem 
+                <ListItem
                     key={idx}
-                    item={itemName} 
-                    size={item.size} 
+                    item={itemName}
+                    size={item.size}
                     target={dir + itemName}
                     side={side}
                     isFolder={isFolder}
+                    isFiltered={!!(props.filter || props[side].filter)}
                     fileIcon={
-                        props.settings.thumbnails && addIcon(type, itemName) === "file-image"
-                        ? <ImageIcon target={dir + itemName} side={side}/>
-                        : <FontAwesomeIcon className={`${type}-icon`} icon={addIcon(type, itemName)} />
+                        props.settings.thumbnails &&
+                        addIcon(type, itemName) === "file-image" ? (
+                            <ImageIcon target={dir + itemName} side={side} />
+                        ) : (
+                            <FontAwesomeIcon
+                                className={`${type}-icon`}
+                                icon={addIcon(type, itemName)}
+                            />
+                        )
                     }
-                    checkIcon={<FontAwesomeIcon className="check-icon" icon="check" />}
+                    checkIcon={
+                        <FontAwesomeIcon className='check-icon' icon='check' />
+                    }
                 />
             );
         }

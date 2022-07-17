@@ -10,7 +10,7 @@
     }
     &-right {
         flex-direction: row-reverse;
-        input {
+        input, label {
             text-align: right;
         }
     }
