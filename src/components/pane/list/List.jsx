@@ -9,9 +9,8 @@ import ContextActions from '../../context/ContextActions';
 
 function List(props) {
     const { side } = props;
-    const { dir } = props[side];
     const { splitView, grid } = props.settings[side];
-    let { files, folders } = props[side];
+    let { dir, files, folders } = props[side];
 
     function filterResults(items, filter) {
         return items.filter(item => {
@@ -24,8 +23,7 @@ function List(props) {
         files = filterResults(files, props.filter);
         folders = filterResults(folders, props.filter);
     }
-
-    if (props[side].filter) {
+    else if (props[side].filter) {
         files = filterResults(files, props[side].filter);
         folders = filterResults(folders, props[side].filter);
     }
@@ -37,6 +35,7 @@ function List(props) {
         const type = isFolder ? "folder" : "file";
         return items.map((item,idx) => {
             let itemName = item.name ?? item;
+            let icon = addIcon(type, itemName);
             return (
                 <ListItem
                     key={idx}
@@ -46,25 +45,23 @@ function List(props) {
                     side={side}
                     isFolder={isFolder}
                     isFiltered={!!(props.filter || props[side].filter)}
-                    fileIcon={
-                        props.settings.thumbnails &&
-                        addIcon(type, itemName) === "file-image" ? (
-                            <ImageIcon target={dir + itemName} side={side} />
-                        ) : (
-                            <FontAwesomeIcon
-                                className={`${type}-icon`}
-                                icon={addIcon(type, itemName)}
-                            />
-                        )
-                    }
                     checkIcon={
                         <FontAwesomeIcon className='check-icon' icon='check' />
                     }
+                    fileIcon={
+                        props.settings.thumbnails &&
+                        icon === "file-image" 
+                        ? <ImageIcon target={dir + itemName} side={side} />
+                        : <FontAwesomeIcon
+                                className={`${type}-icon`}
+                                icon={icon}
+                          />
+                    }
                 />
             );
-        }
-        );
+        });
     }
+
     if (itemCount === 0) {
         let isFiltered = props.filter + props[side].filter
         if (isFiltered) return (
@@ -84,7 +81,8 @@ function List(props) {
             </ul> 
         );
     }
-    if (splitView && itemCount > 0) {
+
+    if (splitView) {
         return (
             <div className="split-list">
                 { folders.length !== 0 && <ul className={listOrGrid}> {renderList(folders, true)} </ul> }
@@ -93,6 +91,7 @@ function List(props) {
             </div>
         );
     }
+
     return (
         <ul className={listOrGrid}>
             {renderList(folders, true)}

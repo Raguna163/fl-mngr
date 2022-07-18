@@ -3,7 +3,7 @@
   "author": "Tristan Collicott",
   "description": "File manager using electron & react.",
   "license": "epl-2.0",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "private": true,
   "main": "public/electron.js",
   "homepage": "",
