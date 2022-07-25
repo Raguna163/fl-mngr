@@ -1,6 +1,5 @@
 const { app, BrowserWindow, ipcMain, screen, shell, dialog } = require('electron');
-const extFolder = "fmkadmapgofadopljbjfkapdkoienihi";
-const extVersion = "4.25.0_0";
+
 
 let Window;
 
@@ -29,8 +28,17 @@ async function createWindow(x,y) {
         Window.loadURL("http://localhost:3000");
         // React Devtools
         try {
-            let reactDevToolsPath = `Google\\Chrome\\User Data\\Default\\Extensions\\${extFolder}\\${extVersion}`
-            Window.webContents.session.loadExtension(path.join(process.env.LOCALAPPDATA, reactDevToolsPath));
+            const { existsSync, readdirSync } = require('fs');
+            const extFolder = "fmkadmapgofadopljbjfkapdkoienihi";
+            let reactDevToolsPath = `Google\\Chrome\\User Data\\Default\\Extensions\\${extFolder}`;
+            reactDevToolsPath = path.join(process.env.LOCALAPPDATA, reactDevToolsPath);
+            let extVersion;
+            if (existsSync(reactDevToolsPath)) {
+                let dir = readdirSync(reactDevToolsPath);
+                extVersion = dir[0];
+            }
+            else throw Error("Extension Not Installed")
+            Window.webContents.session.loadExtension(path.join(reactDevToolsPath, extVersion));
         } catch (err) {
             console.log("Error loading react devtools:");
             console.log(err);
