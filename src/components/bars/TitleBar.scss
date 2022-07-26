@@ -17,6 +17,8 @@
     }
 }
 
+@import '../../scss/variables';
+
 .title-bar-controls {
     -webkit-app-region: none;
     > * {
@@ -32,7 +34,7 @@
             border-radius: 0;
             background-color: rgba($color: #FFF, $alpha: 0.3);
             &:last-child {
-                background-color: rgba($color: #b33d3d, $alpha: 0.8);
+                background-color: rgba($color: $close-colour, $alpha: 0.8);
             }
         }
     }

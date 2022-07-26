@@ -1,14 +1,12 @@
 .menu-bar {
-  padding: 10px;
-  display: flex;
   align-content: center;
-  justify-content: space-between;
 }
 
-.settings {
+.settings, .menu-bar {
   padding: 10px;
-  div {
-    display: flex;
-    justify-content: space-between;
-  }
+}
+
+.menu-bar, .settings div {
+  display: flex;
+  justify-content: space-between;
 }

@@ -1,8 +1,10 @@
+@import '../../scss/variables';
+
 .status-bar {
     font-weight: bold;
     padding: 2px 1%;
     display: flex;
-    background-color: rgba($color: #000000, $alpha: 0.2);
+    background-color: $segment-bg-colour
     span {
         padding: 5px 0;
         margin: auto 5px;
@@ -13,7 +15,7 @@
         flex: 1;
     }
     svg {
-        color: #b33d3d;
+        color: $red-colour;
     }
     #git {
         cursor: pointer;

@@ -1,7 +1,10 @@
-$border-colour: rgba(255,255,255,0.2);
-$folder-colour: #d4d65a;
-$file-colour: #bdf3ff;
-$check-color: #70e7a6;
+@import '../../../scss/variables';
+
+.list-grid, .split-list, .list-item, .img-icon {
+    display: flex;
+}
+
+// BASIC LIST STYLES
 
 .list {
     font-family: "Fira Code";
@@ -48,9 +51,10 @@ $check-color: #70e7a6;
     }
 }
 
+// GRID VIEW
+
 .list-grid {
     @extend .list;
-    display: flex;
     flex-wrap: wrap;
     align-content: flex-start;
     justify-content: space-around;
@@ -69,9 +73,9 @@ $check-color: #70e7a6;
         max-width: 30%;
         min-width: 10%;
         padding: 5px 10px;
+
         .item-name {
             overflow-wrap: anywhere;
-            color: white !important;
         }
         p {
             margin: auto;
@@ -79,9 +83,6 @@ $check-color: #70e7a6;
         span {
             align-self: center;
             text-align: center;
-            &:last-child {
-                color: $file-colour;
-            }
         }
         .check-icon {
             position: absolute;
@@ -89,6 +90,7 @@ $check-color: #70e7a6;
             top: 10%;
         }
     }
+
     .folder-icon, .check-icon, .file-icon {
         margin: 10px;
         margin-top: 5px;
@@ -96,23 +98,25 @@ $check-color: #70e7a6;
     }
 }
 
+// SPLIT VIEW
+
 .split-list {
     overflow-y: hidden;
-    display: flex;
     flex: 1 1 1px;
     height: 100%;
     padding: 5px;
+
     .list-item {
-        max-width: 100%;
+        width: 100%;
     }
+
     .list {
         padding: 10px;
         height: 100%;
         width: inherit;
         min-width: 25%;
-        // max-width: 50%;
         &:first-child {
-            flex: 0 1 auto;
+            flex: 0 1 35%;
         }
         &:only-child {
             flex-grow: 1;
@@ -124,44 +128,18 @@ $check-color: #70e7a6;
     }
 }
 
-.list-divider {
-    border-right: 1px dashed $border-colour;
-    margin-top: 20px;
-}
-
-.file-icon, .folder-icon, .check-icon {
-    align-self: center;
-}
-
-.folder-icon {
-    color: $folder-colour;
-    margin: 0 10px; 
-}
-
-.file-icon {
-    margin: 0 10px;
-}
-
-.check-icon {
-    color: $check-color;
-    float: right;
-    margin-right: 10px;
-    margin-left: auto;
-}
+// BASIC LIST ITEM STYLES
 
 .list-item {
     position: relative;
-    display: flex;
     overflow-wrap: anywhere;
     transition: all 0.1s ease-in-out;
     padding: 8px 5px;
     margin: 5px 0;
     column-gap: 1%;
+
     span {
         align-self: center;
-    }
-    .item-name {
-        overflow-wrap: break-word;
     }
     p {
         margin: 0 15px 0 auto;
@@ -171,15 +149,20 @@ $check-color: #70e7a6;
         span:last-child {
             color: $file-colour;
         }
+        span:first-child {
+            padding: 5px;
+        }
     }
+
     &:hover::before {
         left: 0;
         top: 0;
         border-radius: 0;
         width: 100%;
         height: 100%;
-        background-color: $border-colour;
+        background-color: $highlight-colour;
     }
+
     &::before {
         content: '';
         position: absolute;
@@ -194,9 +177,34 @@ $check-color: #70e7a6;
     }
 }
 
+// DECORATION STYLES
+
+.list-divider {
+    border-right: 1px dashed $border-colour;
+    margin-top: 20px;
+}
+
+.file-icon, .folder-icon, .check-icon {
+    align-self: center;
+}
+
+.file-icon, .folder-icon {
+    margin: 0 10px;
+}
+
+.folder-icon {
+    color: $folder-colour;
+}
+
+.check-icon {
+    color: $check-color;
+    float: right;
+    margin-right: 10px;
+    margin-left: auto;
+}
+
 .img-icon {
     width: auto;
-    display: flex;
     justify-content: center;
     margin: 10px;
     img {

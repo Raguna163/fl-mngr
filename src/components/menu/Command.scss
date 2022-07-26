@@ -1,22 +1,25 @@
+@import '../../scss/variables';
+
 form {
   display: flex;
   align-content: center;
   margin: 0 20px;
   flex: 1;
-  border-bottom: 1px solid rgba(255,255,255,0.2);
+  border-bottom: 1px solid $border-colour;
+
   input {
     font: 18px "Fira Code";
-    color: whitesmoke;
+    color: $main-colour;
     background-color: transparent;
     border: none;
     width: 100%;
     &:focus {
       outline: none;
-      border-bottom: 1px solid white;
+      border-bottom: 1px solid $main-colour;
     }
     &::selection {
-      color: white;
-      background-color: black;
+      color: $main-colour;
+      background-color: $main-bg-colour;
     }
   }
 }

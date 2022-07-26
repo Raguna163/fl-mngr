@@ -1,10 +1,5 @@
 $tooltip-margin: -30px;
 
-.Tooltip-Wrapper {
-  display: inline-block;
-  position: relative;
-}
-
 .Tooltip {
   position: absolute;
   border-radius: 5px;
@@ -17,6 +12,7 @@ $tooltip-margin: -30px;
   line-height: 1;
   z-index: 1000;
   white-space: nowrap;
+
   &-top, &-bottom {
     @extend .Tooltip;
   }
@@ -25,5 +21,10 @@ $tooltip-margin: -30px;
   }
   &-bottom {
     bottom: $tooltip-margin;
+  }
+  
+  &-Wrapper {
+    display: inline-block;
+    position: relative;
   }
 }
