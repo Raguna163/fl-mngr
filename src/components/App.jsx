@@ -30,12 +30,10 @@ function App() {
       <TitleBar />
       <div id="body">
         <SideBar/>
-        {/* <div className="pane-divider"></div> */}
         <div id="main">
           <MenuBar />
           <div id="Panes">
             <Pane side="left" />
-            {/* <div className="pane-divider"></div> */}
             <Pane side="right" />
           </div>
         </div>

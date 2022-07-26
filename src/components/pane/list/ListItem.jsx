@@ -21,9 +21,9 @@ const GB = 1073741824;
 const MB = 1048576;
 const KB = 1024;
 const formatSize = size => {
-	if (size > GB) return [parseFloat((size / GB).toFixed(2)),"GB"]
-	if (size > MB) return [parseFloat((size / MB).toFixed(2)),"MB"]
-	if (size > KB) return [parseFloat((size / KB).toFixed(2)),"KB"]
+	if (size > GB) return [parseFloat((size / GB).toPrecision(3)),"GB"]
+	if (size > MB) return [parseFloat((size / MB).toPrecision(3)),"MB"]
+	if (size > KB) return [parseFloat((size / KB).toPrecision(3)),"KB"]
 	if (size > 0) return [size,"B"]
 	return ''
 }
