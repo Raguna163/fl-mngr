@@ -2,6 +2,7 @@ const { exec } = require('child_process');
 const fs = require('fs').promises;
 const path = require('path');
 const sharp = require('sharp');
+const ffmpeg = require('fluent-ffmpeg');
 const nodeDiskInfo = require('node-disk-info');
 
 const settingsPath = path.join(process.env.APPDATA, 'fl-mngr', 'state.json');
@@ -49,6 +50,18 @@ async function editFavourites(e, data) {
 
     e.sender.send('update:fave', state.directory.favourites);
     await setSavedState(state);
+}
+
+async function checkFFMPEG(e) {
+    exec('where ffmpeg', async (err) =>{
+        let data;
+        if (err) data = false;
+        else data = true;
+        e.sender.send('ffmpeg', data);
+        const state = await getSavedState(settingsPath);
+        state.settings.ffmpeg = data;
+        await setSavedState(state);
+    });
 }
 
 async function getDrives(e) {
@@ -155,6 +168,24 @@ async function imgIcon(e, { target, ID, side }) {
             .then(data => e.sender.send('icon', { data, ID, side }))
             .catch(err => console.log(err));
     } 
+    else if (['.mp4', '.avi', '.mpg', '.wmv'].includes(path.extname(target))) {
+        let outputFolder = path.join(process.env.APPDATA, 'fl-mngr', 'vidthumbs');
+        let outputFile = `temp-${path.basename(target)}.jpg`;
+        let output = path.join(outputFolder, outputFile);
+        ffmpeg(target)
+          .screenshot({
+            timestamps: [1],
+            filename: outputFile,
+            folder: outputFolder,
+            size: '500x?'
+          }).on('end', () => {
+            sharp(output)
+                .toBuffer()
+                .then(data => e.sender.send('icon', { data, ID, side }))
+                .catch(err => console.log(err))
+                .finally(() => { fs.unlink(output) });
+          });
+    }
     else {
         sharp(target)
             .resize({ width: 200, kernel: sharp.kernel.mitchell })
@@ -168,6 +199,7 @@ async function imgIcon(e, { target, ID, side }) {
 module.exports = {
     saveSettings,
     editFavourites,
+    checkFFMPEG,
     getDrives,
     readDir,
     openFile,

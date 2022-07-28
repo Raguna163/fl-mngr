@@ -4,7 +4,7 @@ import directoryReducer from './directory';
 import contextReducer from './context';
 import selectionReducer from './selection';
 import settingsReducer from './settings';
-import { readDir, updateDir, addToDir, removeFromDir, preview, getDrives, updateFavourites } from '../actions/ipcRx';
+import { readDir, updateDir, addToDir, removeFromDir, preview, getDrives, updateFavourites, checkFFMPEG } from '../actions/ipcRx';
 
 const reducers = combineReducers({
     directory: directoryReducer,
@@ -20,7 +20,8 @@ const IPC = window.ipc.createIpc({
     'file:renamed': updateDir,
     'new': addToDir,
     'delete': removeFromDir,
-    'preview': preview
+    'preview': preview,
+    'ffmpeg': checkFFMPEG
 });
 
 export default createStore(reducers, applyMiddleware(thunk, IPC));

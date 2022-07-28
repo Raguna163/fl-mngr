@@ -113,10 +113,13 @@ export function addIcon(type, item) {
         case 'gif':
         case 'jpeg':
             return "file-image"
+        case '3gp':
+        case 'avi':
         case 'mov':
         case 'mp4':
         case 'mpeg':
         case 'mpg':
+        case 'wmv':
             return "file-video"
         default:
             return "file";

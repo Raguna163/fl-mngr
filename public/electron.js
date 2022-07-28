@@ -95,6 +95,7 @@ async function ipcEventHandlers () {
     ipcMain.on('save:settings', FileIPC.saveSettings);
     ipcMain.on('edit:fave', FileIPC.editFavourites);
     ipcMain.on('read:dir', FileIPC.readDir);
+    ipcMain.once('read:dir', FileIPC.checkFFMPEG);
     ipcMain.on('read:drives', FileIPC.getDrives);
 
     ipcMain.on('copy:items', FileIPC.copyItems);

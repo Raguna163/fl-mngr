@@ -36,6 +36,9 @@ function List(props) {
         return items.map((item,idx) => {
             let itemName = item.name ?? item;
             let icon = addIcon(type, itemName);
+            let { settings } = props;
+            let isFileImage = icon === "file-image";
+            let isVideoThhumbnail = settings.ffmpeg && icon === "file-video";
             return (
                 <ListItem
                     key={idx}
@@ -49,8 +52,7 @@ function List(props) {
                         <FontAwesomeIcon className='check-icon' icon='check' />
                     }
                     fileIcon={
-                        props.settings.thumbnails &&
-                        icon === "file-image" 
+                        settings.thumbnails && ( isFileImage || isVideoThhumbnail )
                         ? <ImageIcon target={dir + itemName} side={side} />
                         : <FontAwesomeIcon
                                 className={`${type}-icon`}

@@ -5,7 +5,8 @@ import {
     UPDATE_DIRECTORY,
     ADD_TO_DIRECTORY,
     REMOVE_FROM_DIRECTORY,
-    IMG_SELECTION
+    IMG_SELECTION,
+    FFMPEG_INSTALLED
 } from './types';
 
 const switchSides = side => side === 'left' ? 'right' : 'left';
@@ -53,4 +54,8 @@ export const removeFromDir = (e, data) => (dispatch, getState) => {
     if (data.side) pane = data.side; 
     else if (data.otherSide) pane = switchSides(pane);
     dispatch({ type: REMOVE_FROM_DIRECTORY, payload: { data: data.selection, pane, type } });
+}
+
+export const checkFFMPEG = (e, data) => {
+    return { type: FFMPEG_INSTALLED, payload: data }
 }

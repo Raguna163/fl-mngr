@@ -3,7 +3,8 @@ import {
     TOGGLE_SIDEBAR,
     TOGGLE_VIEW,
     TOGGLE_THUMBNAILS,
-    CHANGE_ZOOM
+    CHANGE_ZOOM,
+    FFMPEG_INSTALLED
 } from "../actions/types";
 
 const SAVED_STATE = window.initialState.settings;
@@ -16,6 +17,8 @@ export default (state = SAVED_STATE, { payload, type }) => {
             return { ...state, sidebar: !state.sidebar }
         case TOGGLE_THUMBNAILS:
             return { ...state, thumbnails: !state.thumbnails }
+        case FFMPEG_INSTALLED:
+            return { ...state, ffmpeg: payload }
         case TOGGLE_VIEW:
             return { 
                 ...state, 

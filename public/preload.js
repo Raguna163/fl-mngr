@@ -53,6 +53,7 @@ function initializeState() {
             multiPane: true,
             sidebar: false,
             thumbnails: true,
+            ffmpeg: false,
             left: {
                 splitView: true,
                 grid: false,
