@@ -1,4 +1,3 @@
-
 process.once('loaded', () => {
     const { contextBridge, ipcRenderer } = require("electron");
     const { readFileSync, existsSync, writeFileSync } = require("fs");
@@ -28,36 +27,42 @@ process.once('loaded', () => {
     }
     contextBridge.exposeInMainWorld( "ipc", ipcObject);
 
+    // Checks if saved state already exists, if not initialize one
     const settingsPath = join(process.env.APPDATA, 'fl-mngr', 'state.json');
     let initialState;
     if (!existsSync(settingsPath)) {
-        const { HOMEDRIVE, HOMEPATH } = process.env;
-        let homePath = join(HOMEDRIVE, HOMEPATH) + "\\"; 
-        initialState = {
-            directory: {
-                left: homePath,
-                right: homePath,
-                favourites: [],
-                drives: false
-            },
-            settings: {
-                multiPane: true,
-                sidebar: false,
-                thumbnails: true,
-                left: {
-                    splitView: true,
-                    grid: false,
-                    zoom: 1
-                },
-                right: {
-                    splitView: false,
-                    grid: true,
-                    zoom: 1
-                }
-            }
-        }
+        initialState = initializeState();
         writeFileSync(settingsPath, JSON.stringify(initialState, null, 2))
     }
     initialState = JSON.parse(readFileSync(settingsPath));
     contextBridge.exposeInMainWorld("initialState", initialState);
 });
+
+function initializeState() {
+    const { join } = require("path");
+    const { HOMEDRIVE, HOMEPATH } = process.env;
+    let homePath = join(HOMEDRIVE, HOMEPATH) + "\\";
+    return {
+        directory: {
+            left: homePath,
+            right: homePath,
+            favourites: [],
+            drives: false
+        },
+        settings: {
+            multiPane: true,
+            sidebar: false,
+            thumbnails: true,
+            left: {
+                splitView: true,
+                grid: false,
+                zoom: 1
+            },
+            right: {
+                splitView: false,
+                grid: true,
+                zoom: 1
+            }
+        }
+    }
+}
