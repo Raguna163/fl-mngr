@@ -19,6 +19,7 @@ function Tooltip(props) {
             className='Tooltip-Wrapper'
             onMouseEnter={show}
             onMouseLeave={hide}
+            onClick={hide}
         >
             {active && (
               <div className={`Tooltip-${props.pos || "top"}`}>
