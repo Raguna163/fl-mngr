@@ -1,5 +1,6 @@
 //Icons in alphabetical order
 import { 
+    faBook,
     faChalkboard,
     faCheck, 
     faChevronDown, 
@@ -18,10 +19,15 @@ import {
     faFileAlt, 
     faFileArchive, 
     faFileAudio, 
-    faFileCode, 
+    faFileCode,
+    faFileExcel, 
     faFileImage, 
-    faFileImport, 
-    faFileVideo, 
+    faFileImport,
+    faFileLines,
+    faFilePowerpoint, 
+    faFileVideo,
+    faFileWord,
+    faFileZipper,
     faFolder, 
     faFolderPlus, 
     faHardDrive,
@@ -49,6 +55,7 @@ import ImageCache from './imageCache';
 export const cache = ImageCache;
 
 export default [
+    faBook,
     faChalkboard,
     faCheck, 
     faChevronDown, 
@@ -68,9 +75,14 @@ export default [
     faFileArchive,
     faFileAudio,
     faFileCode,
+    faFileExcel,
     faFileImage,
     faFileImport,
+    faFileLines,
+    faFilePowerpoint,
     faFileVideo,
+    faFileWord,
+    faFileZipper,
     faFolder, 
     faFolderPlus, 
     faHardDrive,
@@ -94,34 +106,38 @@ export default [
     faWindowRestore,
 ];
 
+let icons = {
+    archive: "file-zipper",
+    audio: "file-audio",
+    book: "book",
+    code: "file-code",
+    excel: "file-excel",
+    image: "file-image",
+    text: "file-lines",
+    powerpoint: "file-powerpoint",
+    video: "file-video",
+    word: "file-word",
+}
+
+let fileTypes = {
+    audio: ['flac', 'mp3', 'wav', 'wma'],
+    archive: ['7z', 'rar', 'zip'],
+    book: ['epub', 'mobi', 'azw', 'azw3'],
+    code: ['bat', 'c', 'cs', 'css', 'cpp', 'h', 'java', 'js', 'json', 'jsx', 'map', 'py', 'ts', 'tsx', 'xml', 'xps'],
+    excel: ['xlsx', 'xlsm', 'xlsb', 'xltm', 'xls', 'xlam'],
+    image: ['bmp', 'gif', 'ico', 'jpg', 'jpeg', 'png', 'raw', 'svg', 'tiff'],
+    powerpoint: ['potm', 'potx', 'ppam', 'ppsm', 'ppsx', 'pptx'],
+    text: ['csv', 'db', 'dll', 'ini', 'log', 'odt', 'rtf', 'sav', 'txt',],
+    video: ['3gp', 'avi', 'flv', 'mkv', 'mov', 'mp4', 'mpg', 'mpeg', 'wmv'],
+    word: ['doc', 'docx', 'docm', 'dotm', 'dotx'],
+}
 
 export function addIcon(type, item) {
     if (type === "folder") return type;
     let basename = item.split('.');
     const ext = basename[basename.length - 1].toLowerCase();
-    switch (ext) {
-        case 'mp3':
-        case 'wav':
-            return "file-audio";
-        case 'txt':
-        case 'log':
-            return "file-alt";
-        case 'js':
-            return "file-code"
-        case 'jpg':
-        case 'png':
-        case 'gif':
-        case 'jpeg':
-            return "file-image"
-        case '3gp':
-        case 'avi':
-        case 'mov':
-        case 'mp4':
-        case 'mpeg':
-        case 'mpg':
-        case 'wmv':
-            return "file-video"
-        default:
-            return "file";
+    for (let type in fileTypes) {
+        if (fileTypes[type].includes(ext)) return icons[type]
     }
+    return "file";
 }

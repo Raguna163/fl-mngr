@@ -6,6 +6,7 @@ const ffmpeg = require('fluent-ffmpeg');
 const nodeDiskInfo = require('node-disk-info');
 
 const settingsPath = path.join(process.env.APPDATA, 'fl-mngr', 'state.json');
+const videoFormats = ['3gp', 'avi', 'flv', 'mkv', 'mov', 'mp4', 'mpg', 'mpeg', 'wmv'];
 let FSWatcher = { left: null, right: null };
 const FSOptions = {
     ignored: / (^| [\\/\\])\../,
@@ -168,7 +169,7 @@ async function imgIcon(e, { target, ID, side }) {
             .then(data => e.sender.send('icon', { data, ID, side }))
             .catch(err => console.log(err));
     } 
-    else if (['.mp4', '.avi', '.mpg', '.wmv'].includes(path.extname(target))) {
+    else if (videoFormats.includes(path.extname(target))) {
         let outputFolder = path.join(process.env.APPDATA, 'fl-mngr', 'vidthumbs');
         let outputFile = `temp-${path.basename(target)}.jpg`;
         let output = path.join(outputFolder, outputFile);
