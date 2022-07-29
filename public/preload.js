@@ -1,7 +1,5 @@
 process.once('loaded', () => {
     const { contextBridge, ipcRenderer } = require("electron");
-    const { readFileSync, existsSync, writeFileSync } = require("fs");
-    const { join } = require("path");
     const REI = require('redux-electron-ipc');
     // Expose protected methods that allow the renderer process to use
     // the ipcRenderer without exposing the entire object
@@ -27,12 +25,16 @@ process.once('loaded', () => {
     }
     contextBridge.exposeInMainWorld( "ipc", ipcObject);
 
+    const { readFileSync, existsSync, writeFileSync, mkdirSync } = require("fs");
+    const { join } = require("path");
     // Checks if saved state already exists, if not initialize one
     const settingsPath = join(process.env.APPDATA, 'fl-mngr', 'state.json');
+    const thumbsPath = join(process.env.APPDATA, 'fl-mngr', 'thumbs');
     let initialState;
     if (!existsSync(settingsPath)) {
         initialState = initializeState();
-        writeFileSync(settingsPath, JSON.stringify(initialState, null, 2))
+        writeFileSync(settingsPath, JSON.stringify(initialState, null, 2));
+        mkdirSync(thumbsPath);
     }
     initialState = JSON.parse(readFileSync(settingsPath));
     contextBridge.exposeInMainWorld("initialState", initialState);
