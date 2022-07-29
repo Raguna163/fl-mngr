@@ -87,7 +87,7 @@ export default (state = INITIAL_STATE, { payload, type }) => {
                 } 
             }
         case REMOVE_FROM_DIRECTORY:
-            let newList = state[payload.pane][payload.type + "s"].filter(elem => elem !== payload.data);
+            let newList = state[payload.pane][payload.type + "s"].filter(elem => elem.name !== payload.data);
             return { 
                 ...state, 
                 [payload.pane]: {

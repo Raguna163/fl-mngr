@@ -3,10 +3,11 @@ const fs = require('fs').promises;
 const path = require('path');
 const sharp = require('sharp');
 const ffmpeg = require('fluent-ffmpeg');
+const chokidar = require('chokidar');
 const nodeDiskInfo = require('node-disk-info');
 
 const settingsPath = path.join(process.env.APPDATA, 'fl-mngr', 'state.json');
-const videoFormats = ['3gp', 'avi', 'flv', 'mkv', 'mov', 'mp4', 'mpg', 'mpeg', 'wmv'];
+const videoFormats = ['.3gp','.avi','.flv','.mkv','.mov','.mp4','.mpg','.mpeg','.wmv'];
 let FSWatcher = { left: null, right: null };
 const FSOptions = {
     ignored: / (^| [\\/\\])\../,
@@ -37,7 +38,7 @@ const setSavedState = async state => fs.writeFile(settingsPath, JSON.stringify(s
 async function saveSettings(e, newSettings) {
     const state = await getSavedState(settingsPath);
     state.settings = newSettings;
-    await setSavedState(state);
+    setSavedState(state);
 }
 
 async function editFavourites(e, data) {
@@ -50,7 +51,7 @@ async function editFavourites(e, data) {
         : [...favourites.slice(0, index), ...favourites.slice(index + 1)];
 
     e.sender.send('update:fave', state.directory.favourites);
-    await setSavedState(state);
+    setSavedState(state);
 }
 
 async function checkFFMPEG(e) {
@@ -61,7 +62,7 @@ async function checkFFMPEG(e) {
         e.sender.send('ffmpeg', data);
         const state = await getSavedState(settingsPath);
         state.settings.ffmpeg = data;
-        await setSavedState(state);
+        setSavedState(state);
     });
 }
 
@@ -72,13 +73,12 @@ async function getDrives(e) {
             e.sender.send('drives:read', disks);
             const state = await getSavedState(settingsPath);
             state.directory.drives = disks;
-            await setSavedState(state);
+            setSavedState(state);
         })
         .catch(err => console.log(err));
 }
 
 async function readDir(event, { dir, side }) {
-    const chokidar = require('chokidar');
     if (FSWatcher[side]) FSWatcher[side].close();
     try {
         let filenames = await fs.readdir(dir, { withFileTypes: true });
@@ -95,7 +95,7 @@ async function readDir(event, { dir, side }) {
 
         const state = await getSavedState(settingsPath);
         state.directory[side] = dir;
-        await setSavedState(state);
+        setSavedState(state);
     } catch (err) {
         console.log(err);
     }
@@ -108,7 +108,7 @@ async function readDir(event, { dir, side }) {
         .on('add', update => sendNew(path.basename(update), "files"))
         .on('addDir', update => sendNew(path.basename(update), "folders"))
         .on('unlink', update => sendDel(path.basename(update)))
-        .on('unlinkDir', update => sendDel(path.basename(update)));
+        .on('unlinkDir', update => sendDel(path.basename(update)))
 }
 
 function openFile(e, file) { exec(`"${file}"`) }
@@ -161,16 +161,19 @@ async function previewFile(e, target) {
 }
 
 async function imgIcon(e, { target, ID, side }) {
+    const sendIcon = data => e.sender.send('icon', { data, ID, side });
+
     if (path.extname(target) === ".gif") {
         let { size } = await fs.stat(target);
         sharp(target, { animated: true, pages: -1 })
             .webp({ quality: size > 1000000 ? 30 : 50 })
             .toBuffer()
-            .then(data => e.sender.send('icon', { data, ID, side }))
+            .then(sendIcon)
             .catch(err => console.log(err));
     } 
+
     else if (videoFormats.includes(path.extname(target))) {
-        let outputFolder = path.join(process.env.APPDATA, 'fl-mngr', 'vidthumbs');
+        let outputFolder = path.join(process.env.APPDATA, 'fl-mngr', 'thumbs');
         let outputFile = `temp-${path.basename(target)}.jpg`;
         let output = path.join(outputFolder, outputFile);
         ffmpeg(target)
@@ -182,17 +185,18 @@ async function imgIcon(e, { target, ID, side }) {
           }).on('end', () => {
             sharp(output)
                 .toBuffer()
-                .then(data => e.sender.send('icon', { data, ID, side }))
+                .then(sendIcon)
                 .catch(err => console.log(err))
                 .finally(() => { fs.unlink(output) });
           });
     }
+
     else {
         sharp(target)
             .resize({ width: 200, kernel: sharp.kernel.mitchell })
             .jpeg({ quality: 50 })
             .toBuffer()
-            .then(data => e.sender.send('icon', { data, ID, side }))
+            .then(sendIcon)
             .catch(err => { if (err.message !== "Input file is missing") console.log(err) });
     }
 }
