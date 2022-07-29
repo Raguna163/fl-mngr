@@ -27,18 +27,17 @@ yarn build:test  - builds project into unpacked directory
 - Traversable folder breadcrumb
 - Dynamic context menu
 - History for each pane and remembers last setup
-- Thumbnail generation with caching *(including GIF!)*
 - Search both panes, or filter each pane separately
+- Thumbnail generation with caching *(including GIF!)*
+- Video thumbnail generation 
+  - *(checks if [ffmpeg](https://ffmpeg.org/download.html) installed)*
 
 ## Planned features
 
 - Persistent Cache
 - Keyboard controls & hotkeys
 - Drag & Drop functionality
-- Video thumbnail creation
 - Better built in media previews 
-- External Drive Support 
-  - You can manually type in the drive letter currently
 - Recycle bin support 
   - *(A lot harder than it sounds)*
 
