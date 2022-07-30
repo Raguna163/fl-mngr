@@ -1,0 +1,26 @@
+.progress {
+    width: 100%;
+    position: relative;
+    margin: 3px auto;
+    > span {
+        width: 60%;
+        height: 5px;
+        left: 0;
+        background-color: grey;
+        position: absolute;
+        border-radius: 5px;
+        &:first-of-type {
+            z-index: 100;
+        }
+    }
+    &-text {
+        margin: auto;
+        height: fit-content;
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        font-size: 12px;
+        font-weight: 500;
+    }
+}

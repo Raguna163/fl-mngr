@@ -6,7 +6,8 @@ import {
     ADD_TO_DIRECTORY,
     REMOVE_FROM_DIRECTORY,
     IMG_SELECTION,
-    FFMPEG_INSTALLED
+    FFMPEG_INSTALLED,
+    UPDATE_PROGRESS
 } from './types';
 
 const switchSides = side => side === 'left' ? 'right' : 'left';
@@ -58,4 +59,17 @@ export const removeFromDir = (e, data) => (dispatch, getState) => {
 
 export const checkFFMPEG = (e, data) => {
     return { type: FFMPEG_INSTALLED, payload: data }
+}
+
+export const updateProgress = (e, data) => (dispatch, getState) => {
+    let { progress } = getState().context;
+    let { type, task, total } = data;
+    if (type === 'new') {
+        progress = { task, total, complete: 0 }
+    } else if (type === 'complete') {
+        progress.complete += 1;
+    } else {
+        progress.task = null;
+    }
+    dispatch({ type: UPDATE_PROGRESS, payload: progress })
 }

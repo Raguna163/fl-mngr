@@ -118,21 +118,27 @@ function openWith(e, file) { exec(`notepad "${file}"`) }
 function openExplorer(e, target) { exec(`explorer "${path.normalize(target)}"`) }
 
 async function copyOrMove(e, { selected, dir, target }, move) {
+    const incrementProgress = () => e.sender.send('progress', { type: 'complete' });
+    let progressPayload = { type: 'new', task: move ? 'moving':'copying', total: selected.length };
+    e.sender.send('progress', progressPayload);
+    
     let dirname = path.dirname(target);
     selected.forEach(async selection => {
         let oldPath = path.join(dirname, selection);
         let newPath = path.join(dir, selection);
         try {
-            if (move) fs.rename(oldPath, newPath);
+            if (move) await fs.rename(oldPath, newPath);
             else {
                 let stat = await fs.stat(oldPath);
                 if (stat.isDirectory()) {
-                    await fs.cp(oldPath, newPath, { recursive: true });
+                    fs.cp(oldPath, newPath, { recursive: true });
                 }
-                else fs.copyFile(oldPath, newPath);
+                else await fs.copyFile(oldPath, newPath);
             }
         } catch (err) {
             console.log(err);
+        } finally {
+            incrementProgress();
         }
     });
 }
@@ -152,10 +158,13 @@ async function newItem(e, { target, name, command }) {
 
 async function deleteItems(e, { selected, dir }) {
     const trash = require('trash');
-    selected.forEach(selection => {
+    let progressPayload = { type: 'new', task: 'deleting', total: selected.length };
+    e.sender.send('progress', progressPayload);
+    selected.forEach(async selection => {
         let target = path.join(dir, selection);
-        trash(target);
+        await trash(target);
         e.sender.send('delete', { selection, otherSide: false });
+        e.sender.send('progress', { type: 'complete' });
     });
 }
 

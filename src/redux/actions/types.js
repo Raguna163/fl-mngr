@@ -17,6 +17,7 @@ export const OPEN_CONTEXT = "OPEN_CONTEXT";
 export const CLOSE_CONTEXT = "CLOSE_CONTEXT";
 export const COMMAND_CONTEXT = "COMMAND_CONTEXT";
 export const PANE_CONTEXT = "PANE_CONTEXT";
+export const UPDATE_PROGRESS = "UPDATE_PROGRESS";
 
 // Selection actions
 export const ADD_SELECTION = "ADD_SELECTION";

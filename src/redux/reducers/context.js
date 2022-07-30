@@ -2,7 +2,8 @@ import {
     OPEN_CONTEXT,
     CLOSE_CONTEXT,
     COMMAND_CONTEXT,
-    PANE_CONTEXT
+    PANE_CONTEXT,
+    UPDATE_PROGRESS
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -15,6 +16,11 @@ const INITIAL_STATE = {
     pos: {
         x: 0,
         y: 0
+    },
+    progress: {
+        task: null,
+        complete: 0,
+        total: 0
     }
 }
 
@@ -31,6 +37,8 @@ export default (state = INITIAL_STATE, { payload, type }) => {
             return { ...state, command: payload }
         case PANE_CONTEXT:
             return { ...state, pane: payload }
+        case UPDATE_PROGRESS:
+            return { ...state, progress: payload }
         default:
             return state;
     }
