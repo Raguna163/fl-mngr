@@ -1,12 +1,12 @@
 import React from 'react';
 import './SideBar.scss';
-import { useSelector } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Preview from '../menu/Preview';
 import Drives from "./list/Drives";
 import Fave from "./list/Fave";
 
-function SideBar() {
+function SideBar({faves, drives, activeSide}) {
     let show = useSelector(({settings}) => settings.sidebar);
     let [ driveState, toggleDrives ] = React.useState(false);
     let [ faveState, toggleSave ] = React.useState(true);
@@ -19,17 +19,21 @@ function SideBar() {
                     <span>Fave</span>
                     <FontAwesomeIcon icon={`chevron-${faveState ? 'up' : 'down'}`}/>
                 </h4>
-                { faveState && <Fave/> }
+                { faveState && <Fave faves={faves} activeSide={activeSide} starIcon={<FontAwesomeIcon icon='star'/>}/> }
                 <h4 onClick={() => toggleDrives(!driveState)}>
                     <FontAwesomeIcon icon="hard-drive"/>
                     <span>Drives</span>
                     <FontAwesomeIcon icon={`chevron-${driveState ? 'up' : 'down'}`}/>
                 </h4>
-                { driveState && <Drives/> }
+                { driveState && <Drives drives={drives} activeSide={activeSide} driveIcon={<FontAwesomeIcon icon='hard-drive'/>}/> }
             </div>
             <Preview location='side'/>
         </div>
     );
 }
 
-export default SideBar
+const mapStateToProps = ({ directory, selection }) => {
+    return { faves: directory.favourites, drives: directory.drives, activeSide: selection.side };
+};
+
+export default connect(mapStateToProps)(SideBar)

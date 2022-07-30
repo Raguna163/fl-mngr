@@ -1,12 +1,14 @@
+@import '../../scss/variables';
+
 .progress {
     width: 100%;
     position: relative;
-    margin: 3px auto;
+    margin: 5px auto;
     > span {
         width: 60%;
         height: 5px;
         left: 0;
-        background-color: grey;
+        background-color: $progress-bg-colour;
         position: absolute;
         border-radius: 5px;
         &:first-of-type {

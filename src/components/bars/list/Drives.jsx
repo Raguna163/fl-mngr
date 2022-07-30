@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import '../SideBar.scss';
 import { fetchDrives } from "../../../redux/actions/ipcTx";
 import { changeDir } from '../../../redux/actions';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Progress from '../../context/Progress';
 
 function Drives(props) {
@@ -22,7 +21,7 @@ function Drives(props) {
                     }
                     key={idx}
                 >
-                    <FontAwesomeIcon icon='hard-drive' />
+                    {props.driveIcon}
                     <span>{drive._mounted}\</span>
                     <span>{drive._capacity}</span>
                     <Progress styling={styling}></Progress>
@@ -37,8 +36,4 @@ function Drives(props) {
     );
 }
 
-const mapStateToProps = ({directory, selection}) => {
-  return { drives: directory.drives, activeSide: selection.side }
-}
-
-export default connect(mapStateToProps, { fetchDrives, changeDir })(Drives)
+export default connect(null, { fetchDrives, changeDir })(Drives)
