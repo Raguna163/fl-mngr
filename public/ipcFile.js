@@ -17,6 +17,8 @@ const FSOptions = {
     depth: 0
 }
 
+const handleError = err => console.log(err);
+
 const sortFiles = (a, b) => {
     let RegEx = /^[0-9]+/g;
     let [aName, bName] = [a.name.toLowerCase(), b.name.toLowerCase()];
@@ -75,7 +77,7 @@ async function getDrives(e) {
             state.directory.drives = disks;
             setSavedState(state);
         })
-        .catch(err => console.log(err));
+        .catch(handleError);
 }
 
 async function readDir(event, { dir, side }) {
@@ -117,12 +119,18 @@ function openExplorer(e, target) { exec(`explorer "${path.normalize(target)}"`) 
 
 async function copyOrMove(e, { selected, dir, target }, move) {
     let dirname = path.dirname(target);
-    selected.forEach(selection => {
+    selected.forEach(async selection => {
         let oldPath = path.join(dirname, selection);
         let newPath = path.join(dir, selection);
         try {
             if (move) fs.rename(oldPath, newPath);
-            else fs.copyFile(oldPath, newPath);
+            else {
+                let stat = await fs.stat(oldPath);
+                if (stat.isDirectory()) {
+                    await fs.cp(oldPath, newPath, { recursive: true });
+                }
+                else fs.copyFile(oldPath, newPath);
+            }
         } catch (err) {
             console.log(err);
         }
@@ -157,7 +165,7 @@ async function previewFile(e, target) {
         .jpeg({ quality: 100, chromaSubsampling: '4:4:4' })
         .toBuffer()
         .then(data => e.sender.send('preview', data))
-        .catch(err => console.log(err));
+        .catch(handleError);
 }
 
 async function imgIcon(e, { target, ID, side }) {
@@ -169,7 +177,7 @@ async function imgIcon(e, { target, ID, side }) {
             .webp({ quality: size > 1000000 ? 30 : 50 })
             .toBuffer()
             .then(sendIcon)
-            .catch(err => console.log(err));
+            .catch(handleError);
     } 
 
     else if (videoFormats.includes(path.extname(target))) {
@@ -186,8 +194,8 @@ async function imgIcon(e, { target, ID, side }) {
             sharp(output)
                 .toBuffer()
                 .then(sendIcon)
-                .catch(err => console.log(err))
-                .finally(() => { fs.unlink(output) });
+                .catch(handleError)
+                .finally(() => { fs.unlink(output).catch(handleError) });
           });
     }
 
@@ -197,7 +205,7 @@ async function imgIcon(e, { target, ID, side }) {
             .jpeg({ quality: 50 })
             .toBuffer()
             .then(sendIcon)
-            .catch(err => { if (err.message !== "Input file is missing") console.log(err) });
+            .catch(handleError);
     }
 }
 
