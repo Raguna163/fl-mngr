@@ -29,26 +29,27 @@ const formatSize = size => {
 }
 
 function ListItem(props) {
-    const { selection, item, side, target, addSelection, isFiltered } = props;
+    const { selection, item, side, target } = props;
     const itemSelected = selection.selected.includes(item) && side === selection.side;
 
     const { zoom } = props[side];
     const [ fontSize, minWidth ] = zoomValues[zoom];
     const size = formatSize(props.size);
 
-    React.useEffect(() => {
-        if (side === selection.side && !isFiltered) {
-            let selectAll = e => {
-                if (e.ctrlKey && e.key === "a" && !itemSelected) {
-                    addSelection(item, side);
-                }
-            }
-            document.addEventListener('keyup', selectAll);
-            return function cleanup() {
-                document.removeEventListener('keyup', selectAll)
-            }
-        }
-    },[selection.side, item, side, addSelection, itemSelected, isFiltered]);
+    // React.useEffect(() => {
+    //     if (side === selection.side && !isFiltered) {
+    //         let selectAll = e => {
+    //             if (e.ctrlKey && e.key === "a" && !itemSelected) {
+    //                 addSelection(item, side);
+    //             }
+    //         }
+    //         document.addEventListener('keyup', selectAll);
+    //         return function cleanup() {
+    //             document.removeEventListener('keyup', selectAll)
+    //         }
+    //     }
+    // },[selection.side, item, side, addSelection, itemSelected, isFiltered]);
+    // React.useEffect(() => {}, [itemSelected])
 
     function handleClick (e) {
         e.stopPropagation();

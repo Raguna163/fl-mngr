@@ -3,12 +3,15 @@ import './List.scss';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { addIcon } from '../../../icons';
+import { selectAll, clearSelection } from '../../../redux/actions';
+import { copyItems, moveItems, deleteItems } from '../../../redux/actions/ipcTx';
 import ListItem from './ListItem';
 import ImageIcon from './ImageIcon';
 import ContextActions from '../../context/ContextActions';
 
 function List(props) {
-    const { side } = props;
+    const { side, activeSide } = props;
+    const { selectAll, clearSelection, copyItems, moveItems, deleteItems } = props;
     const { splitView, grid } = props.settings[side];
     let { dir, files, folders } = props[side];
 
@@ -27,6 +30,23 @@ function List(props) {
         files = filterResults(files, props[side].filter);
         folders = filterResults(folders, props[side].filter);
     }
+
+    React.useEffect(() => {
+        const handleKeypress = event => {
+            event.preventDefault();
+            if (event.ctrlKey && side === activeSide) {
+                if (event.key === "a") selectAll(side);
+                else if (event.key === "c") copyItems(dir + '\\.');
+                else if (event.key === "x") moveItems(dir + '\\.');
+            } 
+            else if (event.key === "Delete" && side === activeSide) deleteItems(side);
+            else if (event.key === "Escape") clearSelection();
+        };
+        document.addEventListener("keyup", handleKeypress);
+        return () => {
+            document.removeEventListener("keyup", handleKeypress);
+        };
+    }, [dir, side, activeSide, selectAll, clearSelection, copyItems, moveItems, deleteItems]);
 
     let itemCount = files.length + folders.length;
     let listOrGrid = `list${grid ? "-grid" : ""}`
@@ -102,9 +122,11 @@ function List(props) {
     );
 }
 
-const mapStateToProps = ({ directory, settings }) => {
+const mapStateToProps = ({ directory, settings, selection }) => {
     const { left, right, filter } = directory;
-    return { left, right, filter, settings };
+    return { left, right, filter, settings, activeSide: selection.side };
 }
 
-export default connect(mapStateToProps)(List);
+const mapDispatchToProps = { selectAll, clearSelection, copyItems, moveItems, deleteItems };
+
+export default connect(mapStateToProps, mapDispatchToProps)(List);

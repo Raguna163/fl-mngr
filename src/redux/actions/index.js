@@ -14,7 +14,8 @@ import {
     TOGGLE_SIDEBAR,
     TOGGLE_VIEW, 
     TOGGLE_THUMBNAILS,
-    CHANGE_ZOOM
+    CHANGE_ZOOM,
+    SELECT_ALL
 } from './types';
 
 // DIRECTORY
@@ -56,6 +57,12 @@ export const commandContext = command => {
 
 export const addSelection = (selection, side) => {
     return { type: ADD_SELECTION, payload: { selection, side } }
+}
+
+export const selectAll = (side) => (dispatch, getState) => {
+    let { directory } = getState();
+    let items = [...directory[side].files, ...directory[side].folders].map(({name}) => name);
+    dispatch({ type: SELECT_ALL, payload: { items, side } })
 }
 
 export const removeSelection = selection => {

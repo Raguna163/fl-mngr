@@ -3,7 +3,8 @@ import {
     CLEAR_SELECTION,
     REMOVE_SELECTION,
     SIDE_SELECTION,
-    IMG_SELECTION
+    IMG_SELECTION,
+    SELECT_ALL
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -24,6 +25,8 @@ export default (state = INITIAL_STATE, { payload, type }) => {
             // Otherwise, clear it and start a new selection array
             let selected = side === state.side ? [...state.selected, selection] : [selection];
             return { ...state, selected, side }
+        case SELECT_ALL:
+            return { ...state, selected: payload.items, side: payload.side }
         case REMOVE_SELECTION:
             return { 
                 ...state, 

@@ -21,6 +21,7 @@ export const UPDATE_PROGRESS = "UPDATE_PROGRESS";
 
 // Selection actions
 export const ADD_SELECTION = "ADD_SELECTION";
+export const SELECT_ALL = "SELECT_ALL";
 export const REMOVE_SELECTION = "REMOVE_SELECTION";
 export const CLEAR_SELECTION = "CLEAR_SELECTION";
 export const SIDE_SELECTION = "SIDE_SELECTION";
