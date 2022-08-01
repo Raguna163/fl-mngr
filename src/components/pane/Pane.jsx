@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import './Pane.scss';
 import { connect } from 'react-redux';
-import { changeDir, openContext, clearSelection, sideSelection } from '../../redux/actions';
-import { fetchDir, saveSettings } from '../../redux/actions/ipcTx';
+import { openContext, clearSelection, sideSelection } from '../../redux/actions';
+import { fetchDir } from '../../redux/actions/ipcTx';
 import Path from './Path';
 import List from './list/List';
 import Controls from './Controls';
@@ -20,7 +20,7 @@ function Pane(props) {
 
     useEffect(() => {
         const handleKeypress = event => {
-            event.preventDefault();
+            // event.preventDefault();
             if (event.key === "Tab" && side === active) sideSelection(side === 'left' ? 'right' : 'left');
         };
         document.addEventListener("keydown", handleKeypress);
@@ -45,7 +45,7 @@ function Pane(props) {
         >
             <Path dir={dir} side={side} />
             <List dir={dir} side={side} />
-            <Controls side={side} saveSettings={props.saveSettings}/>
+            <Controls side={side}/>
         </div>
     )
 }
@@ -61,6 +61,6 @@ const mapStateToProps = ({ directory, selection, settings }) => {
     }
 }
 
-const mapDispatchToProps = { changeDir, fetchDir, openContext, clearSelection, sideSelection, saveSettings }
+const mapDispatchToProps = { fetchDir, openContext, clearSelection, sideSelection }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Pane);

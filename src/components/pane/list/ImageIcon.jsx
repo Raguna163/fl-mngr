@@ -6,7 +6,7 @@ function ImageIcon({ target, side }) {
     const ID = btoa(target);
     const mounted = React.useRef(false);
 
-    const zoomValues = [50, 100, 250, 400, 500]
+    const zoomValues = [50, 75, 125, 200, 300]
     const zoom = useSelector(state => state.settings[side].zoom);
 
     React.useEffect(() => {
@@ -16,7 +16,6 @@ function ImageIcon({ target, side }) {
                 let entry = cache.getEntry(ID);
                 Image.setAttribute('src', `data:image/jpeg;base64, ${entry}`);
             } else {
-                // Image.setAttribute('src', );
                 window.ipc.send('img:icon', { target, ID, side });
                 Image.onload = () => {
                     let data = Image.getAttribute('src').split(',')[1];
@@ -32,14 +31,13 @@ function ImageIcon({ target, side }) {
         return function cleanup() {
             Image.onload = null;
             Image.removeAttribute('src');
-            // Image.remove();
         }
     },[target, ID, side]);
 
     let size = zoomValues[zoom];
     return (
         <div className="file-icon img-icon">
-            <img className={ID} src="/loading.gif" alt="" style={{ height: `${size}px` }}/>
+            <img className={ID} src="/loading.gif" alt="" style={{ width: `${size}px` }}/>
         </div>
     );
 }

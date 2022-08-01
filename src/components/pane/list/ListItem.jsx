@@ -36,21 +36,6 @@ function ListItem(props) {
     const [ fontSize, minWidth ] = zoomValues[zoom];
     const size = formatSize(props.size);
 
-    // React.useEffect(() => {
-    //     if (side === selection.side && !isFiltered) {
-    //         let selectAll = e => {
-    //             if (e.ctrlKey && e.key === "a" && !itemSelected) {
-    //                 addSelection(item, side);
-    //             }
-    //         }
-    //         document.addEventListener('keyup', selectAll);
-    //         return function cleanup() {
-    //             document.removeEventListener('keyup', selectAll)
-    //         }
-    //     }
-    // },[selection.side, item, side, addSelection, itemSelected, isFiltered]);
-    // React.useEffect(() => {}, [itemSelected])
-
     function handleClick (e) {
         e.stopPropagation();
         const func = props.isFolder ? () => props.changeDir(target + '\\', side) : () => props.openFile(target);

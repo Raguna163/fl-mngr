@@ -33,7 +33,6 @@ function List(props) {
 
     React.useEffect(() => {
         const handleKeypress = event => {
-            event.preventDefault();
             if (event.ctrlKey && side === activeSide) {
                 if (event.key === "a") selectAll(side);
                 else if (event.key === "c") copyItems(dir + '\\.');
@@ -67,7 +66,6 @@ function List(props) {
                     target={dir + itemName}
                     side={side}
                     isFolder={isFolder}
-                    isFiltered={!!(props.filter || props[side].filter)}
                     checkIcon={
                         <FontAwesomeIcon className='check-icon' icon='check' />
                     }

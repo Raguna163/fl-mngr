@@ -4,6 +4,7 @@ import Tooltip from '../context/Tooltip';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from 'react-redux';
 import { filterDir, changeViews, changeHistory, changeZoom } from "../../redux/actions";
+import { saveSettings } from '../../redux/actions/ipcTx';
 
 function Controls(props) {
     const { side, filterDir, pane } = props;
@@ -59,7 +60,6 @@ function Controls(props) {
     return (
         <div className={className}>
             <form onSubmit={e => e.preventDefault()}>
-                <label htmlFor="filter">{value}</label>
                 <input
                     name='filter'
                     spellCheck='false'
@@ -82,7 +82,7 @@ function Controls(props) {
                             onClick={() => props.changeViews(side, "grid")}
                         />
                     </Tooltip>
-                    <Tooltip content="Split View">
+                    <Tooltip content='Split View'>
                         <FontAwesomeIcon
                             className='control-active'
                             icon={splitView ? "chalkboard" : "columns"}
@@ -158,4 +158,6 @@ const mapStateToProps = ({directory, selection, settings}) => {
     return { left, right, pane: selection.side, settings }
 }
 
-export default connect(mapStateToProps, { filterDir, changeViews, changeHistory, changeZoom })(Controls);
+const mapDispatchToProps = { filterDir, changeViews, changeHistory, changeZoom, saveSettings }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Controls);

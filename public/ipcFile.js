@@ -102,12 +102,12 @@ async function readDir(event, { dir, side }) {
         console.log(err);
     }
 
-    const sendNew = (name, addTo) => event.sender.send('new', { name, addTo, side });
+    const sendNew = (name, size, addTo) => event.sender.send('new', { name, size, addTo, side });
     const sendDel = (selection) => event.sender.send('delete', { selection, side });
 
     FSWatcher[side] = chokidar.watch(dir, FSOptions);
     FSWatcher[side]
-        .on('add', update => sendNew(path.basename(update), "files"))
+        .on('add', (update, stats) => sendNew(path.basename(update), stats.size, "files"))
         .on('addDir', update => sendNew(path.basename(update), "folders"))
         .on('unlink', update => sendDel(path.basename(update)))
         .on('unlinkDir', update => sendDel(path.basename(update)))

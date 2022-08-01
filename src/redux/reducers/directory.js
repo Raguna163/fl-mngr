@@ -78,12 +78,13 @@ export default (state = INITIAL_STATE, { payload, type }) => {
                 } 
             }
         case ADD_TO_DIRECTORY:
-            let { addTo } = payload;
+            const { addTo, name, size } = payload;
+            console.log(size);
             return { 
                 ...state, 
                 [payload.pane]: { 
                     ...state[payload.pane], 
-                    [addTo]: [...state[payload.pane][addTo], payload.name] 
+                    [addTo]: [...state[payload.pane][addTo], { name, size }] 
                 } 
             }
         case REMOVE_FROM_DIRECTORY:

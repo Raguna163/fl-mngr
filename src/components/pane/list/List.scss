@@ -68,7 +68,7 @@
     
     .list-item {
         flex-direction: column;
-        align-self: center;
+        align-self: baseline;
         font-size: small;
         max-width: 30%;
         min-width: 10%;
@@ -209,6 +209,6 @@
     margin: 10px;
     img {
         transition: all 0.1s ease-in-out;
-        width: auto;
+        max-width: 110%;
     }
 }
