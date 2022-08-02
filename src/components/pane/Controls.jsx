@@ -41,7 +41,8 @@ function Controls(props) {
 
     function handleChange(e) {
         const { folders, files } = props[side]
-        let result = [...folders, ...files].find(item => item.name.toLowerCase().includes(e.target.value.toLowerCase()));
+        const filterItems = item => item.name.toLowerCase().includes(e.target.value.toLowerCase()); 
+        let result = [...folders, ...files].find(filterItems);
         if (result) {
             setColour("white");
             lastMatch.current = e.target.value;

@@ -10,10 +10,7 @@ import {
     CLEAR_SELECTION,
     SIDE_SELECTION,
     REMOVE_SELECTION, 
-    TOGGLE_MULTIPANE,
-    TOGGLE_SIDEBAR,
     TOGGLE_VIEW, 
-    TOGGLE_THUMBNAILS,
     CHANGE_ZOOM,
     SELECT_ALL
 } from './types';
@@ -79,18 +76,6 @@ export const sideSelection = side => {
 
 // SETTINGS
 // ACTIONS
-
-export const toggleMultiPane = () => {
-    return { type: TOGGLE_MULTIPANE, payload: null }
-}
-
-export const toggleSidebar = () => {
-    return { type: TOGGLE_SIDEBAR, payload: null }
-}
-
-export const toggleThumbs = () => {
-    return { type: TOGGLE_THUMBNAILS, payload: null }
-}
 
 export const changeViews = (side, type) => {
     return { type: TOGGLE_VIEW, payload: { side, type } }

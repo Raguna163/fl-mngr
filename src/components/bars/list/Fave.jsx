@@ -4,7 +4,6 @@ import "../SideBar.scss";
 import { changeDir, openContext } from "../../../redux/actions";
 
 function Fave(props) {
-    React.useEffect(() => {}, [props.faves]);
     function renderList(faves) {
         return faves.map((fave, idx) => (
             <li

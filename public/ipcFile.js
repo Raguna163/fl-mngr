@@ -30,12 +30,12 @@ const sortFiles = (a, b) => {
 
 const fileOrDir = (files, func) => files.reduce((acc, nxt, idx) => nxt[func]() ? [...acc, files[idx]] : acc, []);
 
-const separateFiles = filenames => [fileOrDir(filenames, 'isDirectory').sort(sortFiles), 
-                                    fileOrDir(filenames, 'isFile').sort(sortFiles)]
+const separateFiles = filenames => [fileOrDir(filenames, 'isDirectory'), 
+                                    fileOrDir(filenames, 'isFile')]
 
 const getSavedState = async settingsPath => JSON.parse(await fs.readFile(settingsPath));
 
-const setSavedState = async state => fs.writeFile(settingsPath, JSON.stringify(state, null, 2));
+const setSavedState = state => fs.writeFile(settingsPath, JSON.stringify(state, null, 2));
 
 async function saveSettings(e, newSettings) {
     const state = await getSavedState(settingsPath);
@@ -68,7 +68,7 @@ async function checkFFMPEG(e) {
     });
 }
 
-async function getDrives(e) {
+function getDrives(e) {
     nodeDiskInfo
         .getDiskInfo()
         .then(async disks => {
@@ -92,14 +92,14 @@ async function readDir(event, { dir, side }) {
             if (status !== 'rejected') file.size = value.size ?? 0
         });
         
-        const [folders, files] = separateFiles(filenames);
+        const [folders, files] = separateFiles(filenames.sort(sortFiles));
         event.sender.send('dir:read', { side, files, folders, dir });
 
         const state = await getSavedState(settingsPath);
         state.directory[side] = dir;
         setSavedState(state);
     } catch (err) {
-        console.log(err);
+        handleError(err);
     }
 
     const sendNew = (name, size, addTo) => event.sender.send('new', { name, size, addTo, side });
@@ -117,8 +117,7 @@ function openFile(e, file) { exec(`"${file}"`) }
 function openWith(e, file) { exec(`notepad "${file}"`) }
 function openExplorer(e, target) { exec(`explorer "${path.normalize(target)}"`) }
 
-async function copyOrMove(e, { selected, dir, target }, move) {
-    const incrementProgress = () => e.sender.send('progress', { type: 'complete' });
+function copyOrMove(e, { selected, dir, target }, move) {
     let progressPayload = { type: 'new', task: move ? 'moving':'copying', total: selected.length };
     e.sender.send('progress', progressPayload);
     
@@ -127,36 +126,44 @@ async function copyOrMove(e, { selected, dir, target }, move) {
         let oldPath = path.join(dirname, selection);
         let newPath = path.join(dir, selection);
         try {
-            if (move) await fs.rename(oldPath, newPath);
+            if (move) fs.rename(oldPath, newPath);
             else {
                 let stat = await fs.stat(oldPath);
                 if (stat.isDirectory()) {
                     fs.cp(oldPath, newPath, { recursive: true });
                 }
-                else await fs.copyFile(oldPath, newPath);
+                else fs.copyFile(oldPath, newPath);
             }
         } catch (err) {
-            console.log(err);
+            handleError(err)
         } finally {
-            incrementProgress();
+            e.sender.send('progress', { type: 'complete' });
         }
     });
 }
 
-async function copyItems(e, data) { copyOrMove(e, data, false) }
-async function moveItems(e, data) { copyOrMove(e, data, true) }
+function copyItems(e, data) { copyOrMove(e, data, false) }
+function moveItems(e, data) { copyOrMove(e, data, true) }
 
-async function renameFile(e, { oldName, newName, dir }) {
-    fs.rename(path.resolve(dir, oldName), path.resolve(dir, newName));
-    e.sender.send('delete', { selection: oldName, otherSide: false });
+function renameFile(e, { oldName, newName, dir }) {
+    try {
+        fs.rename(path.resolve(dir, oldName), path.resolve(dir, newName));
+        e.sender.send('delete', { selection: oldName, otherSide: false });
+    } catch (err) {
+        handleError(err);
+    }
 }
 
-async function newItem(e, { target, name, command }) {
-    if (command === "New File") fs.writeFile(path.join(target, name), "");
-    else fs.mkdir(path.join(target, name));
+function newItem(e, { target, name, command }) {
+    try {
+        if (command === "New File") fs.writeFile(path.join(target, name), "");
+        else fs.mkdir(path.join(target, name));
+    } catch (err) {
+        handleError(err)
+    }
 }
 
-async function deleteItems(e, { selected, dir }) {
+function deleteItems(e, { selected, dir }) {
     const trash = require('trash');
     let progressPayload = { type: 'new', task: 'deleting', total: selected.length };
     e.sender.send('progress', progressPayload);
@@ -168,7 +175,7 @@ async function deleteItems(e, { selected, dir }) {
     });
 }
 
-async function previewFile(e, target) {
+function previewFile(e, target) {
     sharp(target)
         .resize({ width: 1920, kernel: sharp.kernel.mitchell, withoutEnlargement: true })
         .jpeg({ quality: 100, chromaSubsampling: '4:4:4' })

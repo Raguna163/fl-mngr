@@ -22,7 +22,8 @@ function ContextActions(props) {
         if (props.multi ? props.multi !== func.endsWith('s') : false) return null;
         if (!props.multiPane && (title === "Copy" || title === "Move")) return null;
         let arg = argumentReducer(item, props);
-        let alreadyFave = props.faves.some(e => e.path === arg);
+
+        let alreadyFave = props.faves.some(fave => fave.path === arg);
         if (title === "Add Fave" && alreadyFave) title = title.replace("Add", "Delete");
         return (
             <p 

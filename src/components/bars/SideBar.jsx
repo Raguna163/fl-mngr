@@ -1,13 +1,12 @@
 import React from 'react';
 import './SideBar.scss';
-import { connect, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Preview from '../menu/Preview';
 import Drives from "./list/Drives";
 import Fave from "./list/Fave";
 
-function SideBar({faves, drives, activeSide}) {
-    let show = useSelector(({settings}) => settings.sidebar);
+function SideBar({faves, drives, activeSide, show}) {
     let [ driveState, toggleDrives ] = React.useState(false);
     let [ faveState, toggleSave ] = React.useState(true);
     return show && (
@@ -32,8 +31,13 @@ function SideBar({faves, drives, activeSide}) {
     );
 }
 
-const mapStateToProps = ({ directory, selection }) => {
-    return { faves: directory.favourites, drives: directory.drives, activeSide: selection.side };
+const mapStateToProps = ({ directory, selection, settings }) => {
+    return { 
+        faves: directory.favourites, 
+        drives: directory.drives, 
+        activeSide: selection.side,
+        show: settings.sidebar
+    };
 };
 
 export default connect(mapStateToProps)(SideBar)

@@ -79,7 +79,6 @@ export default (state = INITIAL_STATE, { payload, type }) => {
             }
         case ADD_TO_DIRECTORY:
             const { addTo, name, size } = payload;
-            console.log(size);
             return { 
                 ...state, 
                 [payload.pane]: { 
