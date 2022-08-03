@@ -29,8 +29,9 @@ const formatSize = size => {
 }
 
 function ListItem(props) {
-    const { selection, item, side, target } = props;
+    const { selection, item, side, target, highlight } = props;
     const itemSelected = selection.selected.includes(item) && side === selection.side;
+    const border = highlight ? "1px dashed grey" : "none"
 
     const { zoom } = props[side];
     const [ fontSize, minWidth ] = zoomValues[zoom];
@@ -38,7 +39,10 @@ function ListItem(props) {
 
     function handleClick (e) {
         e.stopPropagation();
-        const func = props.isFolder ? () => props.changeDir(target + '\\', side) : () => props.openFile(target);
+        props.onClick();
+        const func = props.isFolder 
+                     ? () => props.changeDir(target + '\\', side) 
+                     : () => props.openFile(target);
         if (e.ctrlKey) {
             if (itemSelected) props.removeSelection(item);
             else props.addSelection(item, side);
@@ -58,17 +62,31 @@ function ListItem(props) {
         props.openContext({ x: e.pageX, y: e.pageY, target, type: props.isFolder ? "folder" : "file" });
     }
 
+    // React.useEffect(() => { 
+    //     let elem = document.querySelector(".highlighted-element")
+    //     if (elem) elem.scrollIntoView();
+    // }, []);
+
     return (
         <>
-            <li onClick={handleClick} onContextMenu={handleContext} className="list-item" style={{ fontSize, minWidth }}>
+            <li
+                onClick={handleClick}
+                onContextMenu={handleContext}
+                className={`${highlight ? 'highlighted-element ' : ''}list-item`}
+                style={{ fontSize, minWidth, border }}
+            >
                 {props.fileIcon}
                 <span className='item-name'>{item}</span>
-                { !props.isFolder && size && <p><span>{size[0]}</span> <span>{size[1]}</span></p> }
+                {!props.isFolder && size && (
+                    <p>
+                        <span>{size[0]}</span> <span>{size[1]}</span>
+                    </p>
+                )}
                 {itemSelected && props.checkIcon}
             </li>
-            <hr/>
+            <hr />
         </>
-    )
+    );
 }
 
 const mapStateToProps = ({ selection, settings }) => {

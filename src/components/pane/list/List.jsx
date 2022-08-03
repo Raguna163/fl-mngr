@@ -3,17 +3,23 @@ import './List.scss';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { addIcon } from '../../../icons';
-import { selectAll, clearSelection } from '../../../redux/actions';
-import { copyItems, moveItems, deleteItems } from '../../../redux/actions/ipcTx';
+import { selectAll, clearSelection, changeDir } from '../../../redux/actions';
+import { copyItems, moveItems, deleteItems, openFile } from '../../../redux/actions/ipcTx';
 import ListItem from './ListItem';
 import ImageIcon from './ImageIcon';
 import ContextActions from '../../context/ContextActions';
+import keyBoardControls from '../../../keyboard';
 
 function List(props) {
-    const { side, activeSide } = props;
-    const { selectAll, clearSelection, copyItems, moveItems, deleteItems } = props;
+    const { side, activeSide, settings } = props;
     const { splitView, grid } = props.settings[side];
     let { dir, files, folders } = props[side];
+
+    let itemCount = files.length + folders.length;
+    let listOrGrid = `list${grid ? "-grid" : ""}`;
+
+    let initialState = { section: folders.length > 0 ? "folder" : "file", idx: -1 };
+    const [highlighted, setHighlighted] = React.useState(initialState);
 
     function filterResults(items, filter) {
         return items.filter(item => {
@@ -31,41 +37,49 @@ function List(props) {
         folders = filterResults(folders, props[side].filter);
     }
 
+    const keyBoardVars = { props, dir, side, files, folders, settings: { splitView, grid } };
     React.useEffect(() => {
-        const handleKeypress = event => {
-            if (event.ctrlKey && side === activeSide) {
-                if (event.key === "a") selectAll(side);
-                else if (event.key === "c") copyItems(dir + '\\.');
-                else if (event.key === "x") moveItems(dir + '\\.');
-            } 
-            else if (event.key === "Delete" && side === activeSide) deleteItems(side);
-            else if (event.key === "Escape") clearSelection();
+        const handleKeydown = event => {
+            const { key, keyCode } = event;
+            let { props, dir, side } = keyBoardVars;
+            if ((keyCode >= 37 && keyCode <= 40) || key === 'Tab') event.preventDefault();
+            if (side === activeSide) {
+                if (event.ctrlKey) {
+                    if (key === "a") props.selectAll(side);
+                    else if (key === "c") props.copyItems(dir + '\\.');
+                    else if (key === "x") props.moveItems(dir + '\\.');
+                    else if (key === "Delete") props.deleteItems(side);
+                } else {
+                    let keyBoardInfo = { event, keyBoardVars, highlighted, setHighlighted }
+                    keyBoardControls(keyBoardInfo);
+                }
+            }
+            else if (key === "Escape") props.clearSelection();
         };
-        document.addEventListener("keyup", handleKeypress);
+        document.addEventListener("keydown", handleKeydown);
         return () => {
-            document.removeEventListener("keyup", handleKeypress);
+            document.removeEventListener("keydown", handleKeydown);
         };
-    }, [dir, side, activeSide, selectAll, clearSelection, copyItems, moveItems, deleteItems]);
-
-    let itemCount = files.length + folders.length;
-    let listOrGrid = `list${grid ? "-grid" : ""}`
+    }, [activeSide, keyBoardVars, highlighted]);
 
     function renderList(items, isFolder) {
         const type = isFolder ? "folder" : "file";
         return items.map((item,idx) => {
             let itemName = item.name ?? item;
             let icon = addIcon(type, itemName);
-            let { settings } = props;
             let isFileImage = icon === "file-image";
             let isVideoThhumbnail = settings.ffmpeg && icon === "file-video";
+            let isHighlighted = highlighted.idx === idx && highlighted.section === type
             return (
                 <ListItem
                     key={idx}
                     item={itemName}
                     size={item.size}
                     target={dir + itemName}
+                    highlight={isHighlighted}
                     side={side}
                     isFolder={isFolder}
+                    onClick={() => setHighlighted(initialState)}
                     checkIcon={
                         <FontAwesomeIcon className='check-icon' icon='check' />
                     }
@@ -125,6 +139,6 @@ const mapStateToProps = ({ directory, settings, selection }) => {
     return { left, right, filter, settings, activeSide: selection.side };
 }
 
-const mapDispatchToProps = { selectAll, clearSelection, copyItems, moveItems, deleteItems };
+const mapDispatchToProps = { selectAll, clearSelection, copyItems, moveItems, deleteItems, changeDir, openFile };
 
 export default connect(mapStateToProps, mapDispatchToProps)(List);
