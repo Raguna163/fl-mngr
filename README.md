@@ -22,6 +22,7 @@ yarn build:test  - builds project into unpacked directory
 
 ## Implemented Features
 
+- Keyboard controls & hotkeys
 - List view, and grid view with zoom
 - Seperate files from folders in both views
 - Traversable folder breadcrumb
@@ -35,7 +36,6 @@ yarn build:test  - builds project into unpacked directory
 ## Planned features
 
 - Persistent Cache
-- Keyboard controls & hotkeys
 - Drag & Drop functionality
 - Better built in media previews 
 - Recycle bin support 
