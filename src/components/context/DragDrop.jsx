@@ -12,14 +12,9 @@ function DragDrop(props) {
     const { closeDrag, moveItems, copyItems, addSelection } = props;
     let item, itemName;
 
-    if (target.length === 1) {
-        item = target[0].split("\\");
-        item = item[item.length - 1];
-        itemName = item;
-    } else {
-        item = `${target.length} items`;
-        itemName = false;
-    }
+    item = target.split("\\");
+    item = item[item.length - 1];
+    itemName = item;
 
     React.useEffect(() => {
         let move = e => {
