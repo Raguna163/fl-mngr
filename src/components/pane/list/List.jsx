@@ -42,14 +42,17 @@ function List(props) {
         const handleKeydown = event => {
             const { key, keyCode } = event;
             let { props, dir, side } = keyBoardVars;
-            if ((keyCode >= 37 && keyCode <= 40) || key === 'Tab') event.preventDefault();
+            
             if (side === activeSide) {
+                let arrowKeys = keyCode >= 37 && keyCode <= 40;
+                if (arrowKeys || key === 'Tab') event.preventDefault();
                 if (event.ctrlKey) {
                     if (key === "a") props.selectAll(side);
                     else if (key === "c") props.copyItems(dir + '\\.');
                     else if (key === "x") props.moveItems(dir + '\\.');
                     else if (key === "Delete") props.deleteItems(side);
                 } else {
+                    // Function handles logic involving
                     let keyBoardInfo = { event, keyBoardVars, highlighted, setHighlighted }
                     keyBoardControls(keyBoardInfo);
                 }

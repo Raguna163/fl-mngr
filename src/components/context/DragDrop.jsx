@@ -4,21 +4,34 @@ import { connect } from 'react-redux';
 import { closeDrag } from "../../redux/actions";
 import { addIcon } from '../../icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { copyItems, moveItems } from '../../redux/actions/ipcTx';
+import { copyItems, moveItems, dragStart } from '../../redux/actions/ipcTx';
 import { addSelection } from '../../redux/actions';
 
 function DragDrop(props) {
-    const { open, dragPos, target, type, side } = props;
-    const { closeDrag, moveItems, copyItems, addSelection } = props;
+    const { open, target, type, selected } = props;
     let item, itemName;
 
-    item = target.split("\\");
-    item = item[item.length - 1];
-    itemName = item;
+    if (selected.length > 1) {
+        item = selected.length + " items";
+    } else {
+        item = target.split("\\");
+        item = item[item.length - 1];
+        itemName = item;
+    }
 
     React.useEffect(() => {
         let move = e => {
-            setStyle(`top:${e.pageY}`,`left:${e.pageX}`,`z-index:20`);
+            let { innerHeight, innerWidth } = window;
+            let [ x, y ] = [ e.clientX, e.clientY ]
+            let margin = 10;
+            let upperBounds = innerWidth - margin < x || innerHeight - margin < y;
+            let lowerBounds = x < margin || y < margin;
+            if (upperBounds || lowerBounds) {
+                props.dragStart(props.selected.length > 1 ? props.selected : target);
+                props.closeDrag();
+            } else {
+                setStyle(`top:${ y }`,`left:${ x }`,`z-index:20`);
+            }
         }
         let drop = e => {
             let dropLocation = document.elementsFromPoint(e.pageX, e.pageY);
@@ -28,25 +41,25 @@ function DragDrop(props) {
             }
             let flag;
             if (dropStack.includes('pane-left')) {
-                if (side !== 'left') {
-                    addSelection(itemName, 'right');
+                if (props.side !== 'left') {
+                    if (itemName) props.addSelection(itemName, 'right');
                     flag = true;
                 }
             } else if (dropStack.includes("pane-right")) {
-                if (side !== 'right') {
-                    addSelection(itemName, 'left');
+                if (props.side !== 'right') {
+                    if (itemName) props.addSelection(itemName, 'left');
                     flag = true;
                 }
             }
             if (flag) {
-                if (e.ctrlKey) copyItems(target);
-                else moveItems(target);
+                if (e.ctrlKey) props.copyItems(target);
+                else props.moveItems(target);
             }
-            setTimeout(closeDrag, 200);
+            setTimeout(props.closeDrag, 200);
         }
         // Test if context menu is out of bounds
         if (open) {
-            testBounds(dragPos);
+            testBounds(props.dragPos);
             document.addEventListener('mouseup', drop);
             document.addEventListener('mousemove', move);
         } 
@@ -54,12 +67,12 @@ function DragDrop(props) {
             document.removeEventListener('mouseup', drop);  
             document.removeEventListener('mousemove', move);
         } 
-    }, [side, target, open, dragPos, closeDrag, moveItems, copyItems, itemName, addSelection]);
+    }, [props, target, open, itemName]);
     
-    let icon = addIcon(type, !itemName ? 'file.file' : itemName);
+    let icon = addIcon(type, itemName ?? 'file.file');
 
     return open && (
-        <div style={{ padding: '10px' }} id="drag-drop">
+        <div style={{ padding: '20px' }} id="drag-drop">
             <FontAwesomeIcon style={{ marginRight: '10px' }} className='drag-icon' icon={icon}/>
             <span>{item}</span>
         </div>
@@ -85,6 +98,6 @@ const mapStateToProps = ({ context, selection }) => {
     return { dragPos, open: dragOpen, selected, target, type, side }
 }
 
-const mapDispatchToProps = { closeDrag, moveItems, copyItems, addSelection };
+const mapDispatchToProps = { closeDrag, moveItems, copyItems, addSelection, dragStart };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DragDrop)

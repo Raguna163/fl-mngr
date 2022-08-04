@@ -41,19 +41,19 @@ function ListItem(props) {
 
     function handleClick (e) {
         e.stopPropagation();
-        if (timeout) {
-            clearTimeout(timeout);
-            timeout = null;
-        }
         props.onClick();
+
+        if (timeout) timeout = clearTimeout(timeout);
+
         const func = props.isFolder 
                      ? () => props.changeDir(target + '\\', side) 
                      : () => props.openFile(target);
+
         if (e.ctrlKey) {
-            console.log(itemSelected)
             if (itemSelected) props.removeSelection(item);
             else props.addSelection(item, side);
-        } else {
+        } 
+        else {
             if (itemSelected && selection.selected.length === 1) func();
             else if (selection.selected.length) props.clearSelection();
             else func();
@@ -62,22 +62,19 @@ function ListItem(props) {
 
     function handleContext(e) {
         e.stopPropagation();
+
+        if (timeout) timeout = clearTimeout(timeout);
+
         if (!itemSelected) {
             props.clearSelection();
             props.addSelection(item, side);
         }
-        let [ x, y ] = [ e.pageX, e.pageY]
-        props.openContext({ x, y, target, type });
+        props.openContext({ x: e.pageX, y: e.pageY, target, type });
     }
 
     function handleDrag(e) {
-        let { pageX, pageY } = e;
-        timeout = setTimeout(() => {
-            let [x, y] = [pageX, pageY];
-            if (selection.selected.length > 1) {
-                props.openDrag({ x, y, target: selection.selected });
-            } else props.openDrag({ x, y, target: target, type });
-        }, 500);
+        let dragInfo = { x: e.pageX, y: e.pageY, target, type }; 
+        timeout = setTimeout(() => props.openDrag(dragInfo), 300);
     }
 
     return (

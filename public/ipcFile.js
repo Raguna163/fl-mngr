@@ -117,6 +117,15 @@ function openFile(e, file) { exec(`"${file}"`) }
 function openWith(e, file) { exec(`notepad "${file}"`) }
 function openExplorer(e, target) { exec(`explorer "${path.normalize(target)}"`) }
 
+function dragStart(e, files) {
+    const icon = path.join(__dirname, 'drag.ico');
+    if (Array.isArray(files)) {
+        e.sender.startDrag({ files, icon })
+    } else {
+        e.sender.startDrag({ file: files, icon })
+    }
+}
+
 function copyOrMove(e, { selected, dir, target }, move) {
     let progressPayload = { type: 'new', task: move ? 'moving':'copying', total: selected.length };
     e.sender.send('progress', progressPayload);
@@ -234,6 +243,7 @@ module.exports = {
     openFile,
     openWith,
     openExplorer,
+    dragStart,
     copyItems,
     moveItems,
     renameFile,

@@ -18,6 +18,7 @@ async function createWindow(x,y) {
             contextIsolation: true,
             worldSafeExecuteJavaScript: true,
             enableRemoteModule: false,
+            sandbox: false,
             preload: path.join(__dirname, '/preload.js')
         }
     });
@@ -85,6 +86,7 @@ async function ipcEventHandlers () {
         }
     });
 
+    ipcMain.on('drag:start', FileIPC.dragStart);
     ipcMain.on('copy:clipboard', (e, target) => copy(target));
     
     ipcMain.on('open:file', FileIPC.openFile);

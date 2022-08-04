@@ -14,6 +14,15 @@ function combineDispatch(dispatch, ...args) {
     });
 }
 
+export const dragStart = target => (dispatch, getState) => {
+    if (Array.isArray(target)) {
+        const { selection, directory } = getState();
+        let { dir } = directory[selection.side]
+        target = target.map(elem => dir + elem);
+    }
+    dispatch(sendIpc('drag:start', target));
+}
+
 export const fetchDir = data => dispatch => {
     combineDispatch(dispatch, sendIpc('read:dir', data));
 }

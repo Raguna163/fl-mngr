@@ -59,11 +59,13 @@ export default function keyBoardControls(data) {
   }
 
   if (event.key === "Enter") {
-    if (section === 'folder') {
-      props.changeDir(dir + folders[idx].name + "\\", side);
-      setHighlighted({ section: 'folder', idx: -1 });
+    if (idx >= 0) {
+      if (section === 'folder') {
+        props.changeDir(dir + folders[idx].name + "\\", side);
+        setHighlighted({ section: 'folder', idx: -1 });
+      }
+      else props.openFile(dir + files[idx].name);
     }
-    else props.openFile(dir + files[idx].name);
   } 
   else if (event.key === "Backspace") {
     props.changeDir(dir.split("\\").slice(0, -2).join("\\") + '\\', side);
