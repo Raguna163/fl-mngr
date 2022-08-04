@@ -3,13 +3,12 @@ import './StatusBar.scss';
 import Tooltip from '../context/Tooltip';
 import Progress from '../context/Progress';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { connect, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import { openGit } from '../../redux/actions/ipcTx';
 import { updateProgress } from '../../redux/actions/ipcRx';
 
 function StatusBar(props) {
-    let selection = useSelector(state => state.selection);
-    let itemsSelected = selection.selected.length;
+    let itemsSelected = props.selected.length;
 
     let styling;
     const { progress } = props;
@@ -52,6 +51,8 @@ function StatusBar(props) {
     );
 }
 
-const mapStateToProps = ({context}) => ({ progress: context.progress });
+const mapStateToProps = ({context, selection}) => {
+    return { progress: context.progress, selected: selection.selected }
+};
 
 export default connect(mapStateToProps, { openGit, updateProgress })(StatusBar);

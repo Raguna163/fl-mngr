@@ -3,7 +3,7 @@ import './List.scss';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { addIcon } from '../../../icons';
-import { selectAll, clearSelection, changeDir } from '../../../redux/actions';
+import { selectAll, clearSelection, changeDir, sideSelection } from '../../../redux/actions';
 import { copyItems, moveItems, deleteItems, openFile } from '../../../redux/actions/ipcTx';
 import ListItem from './ListItem';
 import ImageIcon from './ImageIcon';
@@ -46,6 +46,7 @@ function List(props) {
             if (side === activeSide) {
                 let arrowKeys = keyCode >= 37 && keyCode <= 40;
                 if (arrowKeys || key === 'Tab') event.preventDefault();
+                if (key === 'Tab') props.sideSelection(side === "left" ? "right" : "left");
                 if (event.ctrlKey) {
                     if (key === "a") props.selectAll(side);
                     else if (key === "c") props.copyItems(dir + '\\.');
@@ -142,6 +143,6 @@ const mapStateToProps = ({ directory, settings, selection }) => {
     return { left, right, filter, settings, activeSide: selection.side };
 }
 
-const mapDispatchToProps = { selectAll, clearSelection, copyItems, moveItems, deleteItems, changeDir, openFile };
+const mapDispatchToProps = { selectAll, clearSelection, copyItems, moveItems, deleteItems, changeDir, openFile, sideSelection };
 
 export default connect(mapStateToProps, mapDispatchToProps)(List);

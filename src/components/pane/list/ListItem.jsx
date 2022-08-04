@@ -35,7 +35,8 @@ function ListItem(props) {
     const border = highlight ? "1px dashed grey" : "none"
 
     const { zoom } = props[side];
-    const [ fontSize, minWidth ] = zoomValues[zoom];
+    let [ fontSize, minWidth ] = zoomValues[zoom];
+    if (item.length > 15 && zoom > 0) fontSize = zoomValues[zoom - 1];
     const size = formatSize(props.size);
     let timeout, type = props.isFolder ? "folder" : "file";
 

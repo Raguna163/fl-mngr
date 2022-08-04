@@ -57,7 +57,7 @@ function DragDrop(props) {
             }
             setTimeout(props.closeDrag, 200);
         }
-        // Test if context menu is out of bounds
+        // Test if drag & drop menu is out of bounds
         if (open) {
             testBounds(props.dragPos);
             document.addEventListener('mouseup', drop);

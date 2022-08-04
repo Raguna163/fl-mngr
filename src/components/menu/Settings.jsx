@@ -13,6 +13,7 @@ function Settings(props) {
     let dispatch = useDispatch();
     let settings = useSelector(state => state.settings);
 
+    // Simple state for telling how sidebar icon should be oriented
     let [ sidebarState, setSidebarState ] = React.useState(settings.sidebar ? 1 : 0);
 
     const toggleSidebar = () => {
