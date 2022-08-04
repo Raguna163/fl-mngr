@@ -1,6 +1,6 @@
 @import '../../scss/variables';
 
-#context-menu {
+#context-menu, #drag-drop {
   position: absolute;
   z-index: -10;
   background-color: $main-bg-colour;

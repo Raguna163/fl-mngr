@@ -6,7 +6,8 @@ import {
     removeSelection, 
     clearSelection, 
     changeDir, 
-    openContext 
+    openContext,
+    openDrag
 } from "../../../redux/actions";
 
 const zoomValues = [
@@ -36,9 +37,14 @@ function ListItem(props) {
     const { zoom } = props[side];
     const [ fontSize, minWidth ] = zoomValues[zoom];
     const size = formatSize(props.size);
+    let timeout, type = props.isFolder ? "folder" : "file";
 
     function handleClick (e) {
         e.stopPropagation();
+        if (timeout) {
+            clearTimeout(timeout);
+            timeout = null;
+        }
         props.onClick();
         const func = props.isFolder 
                      ? () => props.changeDir(target + '\\', side) 
@@ -59,18 +65,27 @@ function ListItem(props) {
             props.clearSelection();
             props.addSelection(item, side);
         }
-        props.openContext({ x: e.pageX, y: e.pageY, target, type: props.isFolder ? "folder" : "file" });
+        let [ x, y ] = [ e.pageX, e.pageY]
+        props.openContext({ x, y, target, type });
     }
 
-    // React.useEffect(() => { 
-    //     let elem = document.querySelector(".highlighted-element")
-    //     if (elem) elem.scrollIntoView();
-    // }, []);
+    function handleDrag(e) {
+        let { pageX, pageY } = e;
+        e.stopPropagation();
+        timeout = setTimeout(() => {
+            let [x, y] = [pageX, pageY];
+            console.log("hello")
+            if (selection.selected.length > 1) {
+                props.openDrag({ x, y, target: selection.selected });
+            } else props.openDrag({ x, y, target: target, type });
+        }, 200);
+    }
 
     return (
         <>
             <li
-                onClick={handleClick}
+                onMouseUp={handleClick}
+                onMouseDown={handleDrag}
                 onContextMenu={handleContext}
                 className={`${highlight ? 'highlighted-element ' : ''}list-item`}
                 style={{ fontSize, minWidth, border }}
@@ -100,7 +115,8 @@ const mapDispatchToProps = {
     clearSelection, 
     changeDir, 
     openFile, 
-    openContext 
+    openContext,
+    openDrag
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListItem);

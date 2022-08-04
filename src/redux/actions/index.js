@@ -12,7 +12,9 @@ import {
     REMOVE_SELECTION, 
     TOGGLE_VIEW, 
     CHANGE_ZOOM,
-    SELECT_ALL
+    SELECT_ALL,
+    CLOSE_DRAG,
+    OPEN_DRAG
 } from './types';
 
 // DIRECTORY
@@ -41,9 +43,13 @@ export const openContext = coordinates => {
     return { type: OPEN_CONTEXT, payload: coordinates }
 }
 
-export const closeContext = () => {
-    return { type: CLOSE_CONTEXT, payload: null }
+export const closeContext = () => ({ type: CLOSE_CONTEXT });
+
+export const openDrag = coordinates => {
+    return { type: OPEN_DRAG, payload: coordinates }
 }
+
+export const closeDrag = () => ({ type: CLOSE_DRAG });
 
 export const commandContext = command => {
     return { type: COMMAND_CONTEXT, payload: command }

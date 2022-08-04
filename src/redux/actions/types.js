@@ -14,7 +14,9 @@ export const HISTORY_FORWARD = "HISTORY_FORWARD";
 
 // Context menu actions
 export const OPEN_CONTEXT = "OPEN_CONTEXT";
+export const OPEN_DRAG = "OPEN_DRAG";
 export const CLOSE_CONTEXT = "CLOSE_CONTEXT";
+export const CLOSE_DRAG = "CLOSE_DRAG";
 export const COMMAND_CONTEXT = "COMMAND_CONTEXT";
 export const PANE_CONTEXT = "PANE_CONTEXT";
 export const UPDATE_PROGRESS = "UPDATE_PROGRESS";
