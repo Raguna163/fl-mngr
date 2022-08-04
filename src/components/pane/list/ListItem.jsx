@@ -50,6 +50,7 @@ function ListItem(props) {
                      ? () => props.changeDir(target + '\\', side) 
                      : () => props.openFile(target);
         if (e.ctrlKey) {
+            console.log(itemSelected)
             if (itemSelected) props.removeSelection(item);
             else props.addSelection(item, side);
         } else {
@@ -71,20 +72,18 @@ function ListItem(props) {
 
     function handleDrag(e) {
         let { pageX, pageY } = e;
-        e.stopPropagation();
         timeout = setTimeout(() => {
             let [x, y] = [pageX, pageY];
-            console.log("hello")
             if (selection.selected.length > 1) {
                 props.openDrag({ x, y, target: selection.selected });
             } else props.openDrag({ x, y, target: target, type });
-        }, 200);
+        }, 500);
     }
 
     return (
         <>
             <li
-                onMouseUp={handleClick}
+                onClick={handleClick}
                 onMouseDown={handleDrag}
                 onContextMenu={handleContext}
                 className={`${highlight ? 'highlighted-element ' : ''}list-item`}
