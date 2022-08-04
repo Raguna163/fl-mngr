@@ -6,6 +6,7 @@ import Pane from './pane/Pane';
 import TitleBar from "./bars/TitleBar";
 import StatusBar from "./bars/StatusBar";
 import SideBar from './bars/SideBar';
+import DragDrop from './context/DragDrop';
 
 function App() {
   let dispatch = useDispatch();
@@ -19,9 +20,9 @@ function App() {
         if (side) dispatch({ type: "SIDE_SELECTION", payload: side });
       }
     }
-    document.addEventListener('click', activeSide);
+    document.addEventListener('mousedown', activeSide);
     return function cleanup() {
-      document.removeEventListener('click', activeSide);
+      document.removeEventListener('mousedown', activeSide);
     }
   },[dispatch]);
 
@@ -38,6 +39,7 @@ function App() {
           </div>
         </div>
       </div>
+      <DragDrop />
       <ContextMenu />
       <StatusBar />
     </div>

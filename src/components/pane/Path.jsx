@@ -17,7 +17,7 @@ function Path(props) {
                 }
                 if (idx === arr.length - 1) {
                     return (
-                        <p key={idx} className="active-crumb" onContextMenu={handleContext}>
+                        <p key={idx} data-pathto={target} className="active-crumb" onContextMenu={handleContext}>
                             <span>{ crumb }</span>
                         </p>
                     );
