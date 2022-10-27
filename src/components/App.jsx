@@ -21,8 +21,10 @@ function App() {
       }
     }
     document.addEventListener('mousedown', activeSide);
+    document.addEventListener('contextmenu', activeSide);
     return function cleanup() {
       document.removeEventListener('mousedown', activeSide);
+      document.removeEventListener('contextmenu', activeSide);
     }
   },[dispatch]);
 

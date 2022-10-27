@@ -43,7 +43,8 @@ export default (state = INITIAL_STATE, { payload, type }) => {
                 ...state, 
                 dragPos: { x: payload.x, y: payload.y },
                 dragOpen: true,
-                target: payload.target
+                target: payload.target,
+                type: payload.type
             }
         case CLOSE_CONTEXT:
             return { ...state, contextOpen: false }

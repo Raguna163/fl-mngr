@@ -103,26 +103,26 @@ function List(props) {
     if (itemCount === 0) {
         let isFiltered = props.filter + props[side].filter
         if (isFiltered) return (
-            <ul className="list-empty">
+            <ul id={`list-${side}`} className="list-empty">
                 <span>No search results for "{isFiltered}"</span>
             </ul> 
         )
         return (
-            <ul className="list-empty">
+            <ul id={`list-${side}`} className='list-empty'>
                 <span>The folder</span>
-                <span className="empty-folder">
-                     <FontAwesomeIcon className="icon" icon="folder"/> 
-                     {dir.split('\\')[dir.split('\\').length - 2]}
+                <span className='empty-folder'>
+                    <FontAwesomeIcon className='icon' icon='folder' />
+                    {dir.split("\\")[dir.split("\\").length - 2]}
                 </span>
                 <span>is empty</span>
-                <ContextActions type="pane" />
-            </ul> 
+                <ContextActions type='pane' />
+            </ul>
         );
     }
 
     if (splitView) {
         return (
-            <div className="split-list">
+            <div id={`list-${side}`} className="split-list">
                 { folders.length !== 0 && <ul className={listOrGrid}> {renderList(folders, true)} </ul> }
                 { (folders.length > 0 && files.length > 0) && <div className="list-divider"></div> }
                 { files.length !== 0 && <ul className={listOrGrid}> {renderList(files, false)} </ul> }
@@ -131,7 +131,7 @@ function List(props) {
     }
 
     return (
-        <ul className={listOrGrid}>
+        <ul id={`list-${side}`} className={listOrGrid}>
             {renderList(folders, true)}
             {renderList(files, false)}
         </ul>

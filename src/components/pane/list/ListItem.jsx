@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { openFile } from "../../../redux/actions/ipcTx";
+import { openFile, dragStart } from "../../../redux/actions/ipcTx";
 import { 
     addSelection, 
     removeSelection, 
@@ -75,7 +75,9 @@ function ListItem(props) {
 
     function handleDrag(e) {
         let dragInfo = { x: e.pageX, y: e.pageY, target, type }; 
-        timeout = setTimeout(() => props.openDrag(dragInfo), 300);
+        timeout = setTimeout(() => { 
+            props.openDrag(dragInfo);
+        }, 300);
     }
 
     return (
@@ -113,7 +115,8 @@ const mapDispatchToProps = {
     changeDir, 
     openFile, 
     openContext,
-    openDrag
+    openDrag,
+    dragStart
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListItem);

@@ -9,25 +9,29 @@ import { addSelection } from '../../redux/actions';
 
 function DragDrop(props) {
     const { open, target, type, selected } = props;
-    let item, itemName;
+    let item, multi = false;
 
     if (selected.length > 1) {
         item = selected.length + " items";
+        multi = true;
     } else {
-        item = target.split("\\");
-        item = item[item.length - 1];
-        itemName = item;
+        let idx = target.lastIndexOf("\\");
+        item = target.substring(idx + 1);
+        if (item.length === 0 && open && target) {
+            let split = target.split('\\');
+            item = split[split.length - 2];
+        }
     }
 
     React.useEffect(() => {
         let move = e => {
             let { innerHeight, innerWidth } = window;
-            let [ x, y ] = [ e.clientX, e.clientY ]
+            let [ x, y ] = [ e.clientX, e.clientY ];
             let margin = 10;
             let upperBounds = innerWidth - margin < x || innerHeight - margin < y;
             let lowerBounds = x < margin || y < margin;
             if (upperBounds || lowerBounds) {
-                props.dragStart(props.selected.length > 1 ? props.selected : target);
+                props.dragStart(props.selected.length > 1 ? props.selected : props.target);
                 props.closeDrag();
             } else {
                 setStyle(`top:${ y }`,`left:${ x }`,`z-index:20`);
@@ -35,25 +39,19 @@ function DragDrop(props) {
         }
         let drop = e => {
             let dropLocation = document.elementsFromPoint(e.pageX, e.pageY);
-            let dropStack = [];
-            for (const elem of dropLocation) {
-                dropStack.push(elem.id ? elem.id : elem.className);
-            }
+            let dropStack = dropLocation.map(elem => elem.id ? elem.id : elem.className);
             let flag;
-            if (dropStack.includes('pane-left')) {
-                if (props.side !== 'left') {
-                    if (itemName) props.addSelection(itemName, 'right');
-                    flag = true;
-                }
-            } else if (dropStack.includes("pane-right")) {
-                if (props.side !== 'right') {
-                    if (itemName) props.addSelection(itemName, 'left');
+            for (const side of ['left', 'right']) {
+                if (dropStack.includes(`pane-${side}`)) {
+                    if (!multi || props.selected.length === 0) {
+                        props.addSelection(item, side);
+                    }
                     flag = true;
                 }
             }
             if (flag) {
-                if (e.ctrlKey) props.copyItems(target);
-                else props.moveItems(target);
+                if (e.ctrlKey) props.copyItems(props.target);
+                else props.moveItems(props.target);
             }
             setTimeout(props.closeDrag, 200);
         }
@@ -63,13 +61,13 @@ function DragDrop(props) {
             document.addEventListener('mouseup', drop);
             document.addEventListener('mousemove', move);
         } 
-        return function cleanup() {
+        return () => {
             document.removeEventListener('mouseup', drop);  
             document.removeEventListener('mousemove', move);
         } 
-    }, [props, target, open, itemName]);
+    }, [props, open, item, multi]);
     
-    let icon = addIcon(type, itemName ?? 'file.file');
+    let icon = addIcon(type, item);
 
     return open && (
         <div style={{ padding: '20px' }} id="drag-drop">
@@ -80,7 +78,8 @@ function DragDrop(props) {
 }
 
 function setStyle() {
-    document.getElementById('drag-drop').setAttribute("style", [...arguments].join("px;"));
+    let dragDrop = document.getElementById("drag-drop");
+    dragDrop.setAttribute("style", [...arguments].join("px;"));
 }
 
 function testBounds(pos) {

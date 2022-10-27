@@ -1,4 +1,4 @@
-import { 
+import {
     CLEAR_SELECTION,
     PANE_CONTEXT
 } from './types';
@@ -41,11 +41,11 @@ export const copyPath = target => dispatch => {
 }
 
 export const openFile = file => dispatch => {
-    combineDispatch(dispatch,sendIpc('open:file', file));
+    combineDispatch(dispatch, sendIpc('open:file', file));
 }
 
 export const openWith = file => dispatch => {
-    combineDispatch(dispatch,sendIpc('open:with', file));
+    combineDispatch(dispatch, sendIpc('open:with', file));
 }
 
 export const openExplorer = target => dispatch => {
@@ -57,7 +57,7 @@ export const openGit = () => dispatch => {
 }
 
 export const newItem = (target, name, command) => dispatch => {
-    combineDispatch(dispatch,sendIpc('new:item', { target, name, command }));
+    combineDispatch(dispatch, sendIpc('new:item', { target, name, command }));
 }
 
 export const deleteItems = pane => (dispatch, getState) => {
@@ -87,9 +87,16 @@ export const editFavourites = data => dispatch => {
 }
 
 function copyOrMove(type, dispatch, getState, target) {
-    const { selected, side } = getState().selection;
-    const { pane } = getState().context;
-    const { dir } = getState().directory[switchSides(side)];
+    let { selected, side } = getState().selection;
+    let { pane } = getState().context;
+    let dir;
+    if (target.dir) {
+        dir = getState().directory[target.side].dir;
+        target = target.dir;
+    } else {
+        dir = getState().directory[side].dir;
+    }
+    // dispatch(sendIpc(type, { selected, dir, target }))
     combineDispatch(dispatch, 
         { type: PANE_CONTEXT, payload: switchSides(pane) }, 
         sendIpc(type, { selected, dir, target })

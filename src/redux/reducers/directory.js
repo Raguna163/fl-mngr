@@ -87,12 +87,13 @@ export default (state = INITIAL_STATE, { payload, type }) => {
                 } 
             }
         case REMOVE_FROM_DIRECTORY:
-            let newList = state[payload.pane][payload.type + "s"].filter(elem => elem.name !== payload.data);
+            let filterList = elem => elem.name !== payload.selection;
+            let newList = state[payload.side][payload.removeFrom].filter(filterList);
             return { 
                 ...state, 
-                [payload.pane]: {
-                    ...state[payload.pane],
-                    [payload.type + "s"]: [...newList]
+                [payload.side]: {
+                    ...state[payload.side],
+                    [payload.removeFrom]: [...newList]
                 }
             }
         case HISTORY_BACK:

@@ -103,14 +103,14 @@ async function readDir(event, { dir, side }) {
     }
 
     const sendNew = (name, size, addTo) => event.sender.send('new', { name, size, addTo, side });
-    const sendDel = (selection) => event.sender.send('delete', { selection, side });
+    const sendDel = (selection, removeFrom) => event.sender.send('delete', { selection, side, removeFrom });
 
     FSWatcher[side] = chokidar.watch(dir, FSOptions);
     FSWatcher[side]
         .on('add', (update, stats) => sendNew(path.basename(update), stats.size, "files"))
         .on('addDir', update => sendNew(path.basename(update), "folders"))
-        .on('unlink', update => sendDel(path.basename(update)))
-        .on('unlinkDir', update => sendDel(path.basename(update)))
+        .on('unlink', update => sendDel(path.basename(update), "files"))
+        .on('unlinkDir', update => sendDel(path.basename(update), "folders"))
 }
 
 function openFile(e, file) { exec(`"${file}"`) }
@@ -120,9 +120,9 @@ function openExplorer(e, target) { exec(`explorer "${path.normalize(target)}"`) 
 function dragStart(e, files) {
     const icon = path.join(__dirname, 'drag.ico');
     if (Array.isArray(files)) {
-        e.sender.startDrag({ files, icon })
+        e.sender.startDrag({ files, icon });
     } else {
-        e.sender.startDrag({ file: files, icon })
+        e.sender.startDrag({ file: files, icon });
     }
 }
 

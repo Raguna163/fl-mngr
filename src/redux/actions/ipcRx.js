@@ -10,8 +10,6 @@ import {
     UPDATE_PROGRESS
 } from './types';
 
-const switchSides = side => side === 'left' ? 'right' : 'left';
-
 function Uint8ToBase64(u8Arr) {
     if (!u8Arr) return null;
     const CHUNK_SIZE = 0x8000; //arbitrary number
@@ -50,11 +48,9 @@ export const addToDir = (e, data) => (dispatch, getState) => {
     dispatch({ type: ADD_TO_DIRECTORY, payload: { ...data, pane } })
 }
 
-export const removeFromDir = (e, data) => (dispatch, getState) => {
-    let { pane, type } = getState().context;
-    if (data.side) pane = data.side; 
-    else if (data.otherSide) pane = switchSides(pane);
-    dispatch({ type: REMOVE_FROM_DIRECTORY, payload: { data: data.selection, pane, type } });
+export const removeFromDir = (e, data) => dispatch => {
+    let { selection, side, removeFrom } = data;
+    dispatch({ type: REMOVE_FROM_DIRECTORY, payload: { selection, side, removeFrom } });
 }
 
 export const checkFFMPEG = (e, data) => {
