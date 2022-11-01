@@ -77,7 +77,7 @@ function ListItem(props) {
         let dragInfo = { x: e.pageX, y: e.pageY, target, type }; 
         timeout = setTimeout(() => { 
             props.openDrag(dragInfo);
-        }, 300);
+        }, 500);
     }
 
     return (

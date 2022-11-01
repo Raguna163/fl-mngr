@@ -107,8 +107,9 @@ async function readDir(event, { dir, side }) {
 
     FSWatcher[side] = chokidar.watch(dir, FSOptions);
     FSWatcher[side]
+        .on('error', handleError)
         .on('add', (update, stats) => sendNew(path.basename(update), stats.size, "files"))
-        .on('addDir', update => sendNew(path.basename(update), "folders"))
+        .on('addDir', update => sendNew(path.basename(update), null, "folders"))
         .on('unlink', update => sendDel(path.basename(update), "files"))
         .on('unlinkDir', update => sendDel(path.basename(update), "folders"))
 }

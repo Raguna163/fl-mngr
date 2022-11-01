@@ -44,7 +44,7 @@ export const preview = (e, data) => {
 
 export const addToDir = (e, data) => (dispatch, getState) => {
     let { pane } = getState().context;
-    if (data.side) pane = data.side;
+    pane = data.side ?? pane;
     dispatch({ type: ADD_TO_DIRECTORY, payload: { ...data, pane } })
 }
 

@@ -62,6 +62,7 @@ function Controls(props) {
         <div className={className}>
             <form onSubmit={e => e.preventDefault()}>
                 <input
+                    id={`control-${side}`}
                     name='filter'
                     spellCheck='false'
                     style={{ color: colour }}

@@ -3,13 +3,11 @@ import './Path.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { connect } from 'react-redux';
 import { changeDir, openContext } from "../../redux/actions";
-import Tooltip from '../context/Tooltip';
 
 function Path(props) {
     let pathTo = "";
     const pathArray = props.dir.split("\\").slice(0, -1);
     return (
-        <Tooltip>
             <div id={`path-${props.side}`} className='Path'>
                 {pathArray.map((crumb, idx, arr) => {
                     pathTo += `${crumb}\\`;
@@ -52,7 +50,6 @@ function Path(props) {
                     );
                 })}
             </div>
-        </Tooltip>
     );
 }
 

@@ -40,6 +40,8 @@ function List(props) {
     const keyBoardVars = { props, dir, side, files, folders, settings: { splitView, grid } };
     React.useEffect(() => {
         const handleKeydown = event => {
+            if (document.activeElement.tagName === "INPUT") return;
+            
             const { key, keyCode } = event;
             let { props, dir, side } = keyBoardVars;
             
@@ -72,8 +74,9 @@ function List(props) {
             let itemName = item.name ?? item;
             let icon = addIcon(type, itemName);
             let isFileImage = icon === "file-image";
-            let isVideoThhumbnail = settings.ffmpeg && icon === "file-video";
+            let isVideoThumbnail = settings.ffmpeg && icon === "file-video";
             let isHighlighted = highlighted.idx === idx && highlighted.section === type
+
             return (
                 <ListItem
                     key={idx}
@@ -88,7 +91,7 @@ function List(props) {
                         <FontAwesomeIcon className='check-icon' icon='check' />
                     }
                     fileIcon={
-                        settings.thumbnails && ( isFileImage || isVideoThhumbnail )
+                        settings.thumbnails && ( isFileImage || isVideoThumbnail )
                         ? <ImageIcon target={dir + itemName} side={side} />
                         : <FontAwesomeIcon
                                 className={`${type}-icon`}
