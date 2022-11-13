@@ -8,22 +8,30 @@ process.once('loaded', () => {
         sendIpc: REI.send,
         send: (channel, data) => ipcRenderer.send(channel, data),
         receive: (channel, fn) => ipcRenderer.on(channel, fn),
-        icons: (e, { data, ID, side }) => {
+        Uint8ToBase64: (u8Arr) => {
+            if (!u8Arr) return null;
             const CHUNK_SIZE = 0x8000; //arbitrary number
-            let idx = 0, len = data.length, result = '', slice;
+            let idx = 0, len = u8Arr.length, result = '', slice;
             while (idx < len) {
-                slice = data.subarray(idx, Math.min(idx + CHUNK_SIZE, len));
+                slice = u8Arr.subarray(idx, Math.min(idx + CHUNK_SIZE, len));
                 result += String.fromCharCode.apply(null, slice);
                 idx += CHUNK_SIZE;
             }
-            const img = btoa(result);
-            document
-                .getElementById(`pane-${side}`)
-                .getElementsByClassName(ID)[0]
-                .setAttribute('src', `data:image/jpeg;base64, ${img}`);
+            return Buffer.from(result, 'binary').toString('base64');
+        },
+        icons: (e, { data, ID, side }) => {
+            try {
+                const img = ipcObject.Uint8ToBase64(data);
+                document
+                    .getElementById(`pane-${side}`)
+                    .getElementsByClassName(ID)[0]
+                    .setAttribute('src', `data:image/jpeg;base64, ${img}`);
+            } catch (err) {
+                console.log(err);
+            }
         }
     }
-    contextBridge.exposeInMainWorld( "ipc", ipcObject);
+    contextBridge.exposeInMainWorld("ipc", ipcObject);
 
     const { readFileSync, existsSync, writeFileSync, mkdirSync } = require("fs");
     const { join } = require("path");
@@ -36,7 +44,16 @@ process.once('loaded', () => {
         writeFileSync(settingsPath, JSON.stringify(initialState, null, 2));
         mkdirSync(thumbsPath);
     }
-    initialState = JSON.parse(readFileSync(settingsPath));
+    let settingsFile = readFileSync(settingsPath);
+    try {
+        initialState = JSON.parse(settingsFile);
+    } catch (err) {
+        let errorLocation = err.message.split(' ');
+        errorLocation = parseInt(errorLocation[errorLocation.length - 1]);
+        settingsFile = settingsFile.toString().substring(0, errorLocation);
+        initialState = JSON.parse(settingsFile);
+        writeFileSync(settingsPath, JSON.stringify(initialState, null, 2));
+    }
     contextBridge.exposeInMainWorld("initialState", initialState);
 });
 

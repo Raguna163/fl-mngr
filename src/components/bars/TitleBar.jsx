@@ -33,18 +33,8 @@ function TitleBar() {
 
     function windowControl(type) {
         send('window:control', type);
-        switch (type) {
-            case "restore":
-            case "maximize":
-                toggleMax(!maximized);
-                break;
-            case "compress":
-            case "expand":
-                toggleFullscreen(!fullscreen)
-                break;
-            default:
-                break;
-        }
+        if (type === "restore" || type === "maximize") toggleMax(!maximized);
+        else if (type !== "close") toggleFullscreen(!fullscreen);
     }
 
     return (

@@ -3,7 +3,7 @@ import cache from '../../../imageCache';
 import { useSelector } from 'react-redux';
 
 function ImageIcon({ target, side }) {
-    const ID = btoa(target);
+    const ID = Buffer.from(target, 'binary').toString('base64');
     const mounted = React.useRef(false);
 
     const zoomValues = [50, 75, 125, 200, 300]
@@ -28,9 +28,9 @@ function ImageIcon({ target, side }) {
             if (entry) Image.setAttribute('src', `data:image/jpeg;base64, ${entry}`);
             mounted.current = false;
         }
+
         return function cleanup() {
             Image.onload = null;
-            Image.removeAttribute('src');
         }
     },[target, ID, side]);
 

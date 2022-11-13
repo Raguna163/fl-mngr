@@ -27,7 +27,7 @@ export const SELECT_ALL = "SELECT_ALL";
 export const REMOVE_SELECTION = "REMOVE_SELECTION";
 export const CLEAR_SELECTION = "CLEAR_SELECTION";
 export const SIDE_SELECTION = "SIDE_SELECTION";
-export const IMG_SELECTION = "IMG_SELECTION";
+export const FILE_PREVIEW = "FILE_PREVIEW";
 
 
 // Settings actions

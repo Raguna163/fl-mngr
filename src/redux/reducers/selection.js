@@ -3,7 +3,7 @@ import {
     CLEAR_SELECTION,
     REMOVE_SELECTION,
     SIDE_SELECTION,
-    IMG_SELECTION,
+    FILE_PREVIEW,
     SELECT_ALL
 } from "../actions/types";
 
@@ -12,8 +12,8 @@ const INITIAL_STATE = {
     side: 'left',
     selected: [],
     preview: {
-        image: null,
-        text: null
+        type: null,
+        data: null,
     }
 }
 
@@ -37,8 +37,11 @@ export default (state = INITIAL_STATE, { payload, type }) => {
             return { ...state, selected: payload, multiSelect: false}
         case SIDE_SELECTION:
             return { ...state, side: payload }
-        case IMG_SELECTION:
-            return { ...state, image: payload }
+        case FILE_PREVIEW:
+            if (!payload) return { ...state, preview: { type: null, data: null } }
+            let { data } = payload
+            if (payload.type === 'image') data = window.ipc.Uint8ToBase64(data);
+            return { ...state, preview: { type: payload.type, data } }
         default:
             return state;
     }

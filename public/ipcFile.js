@@ -5,9 +5,9 @@ const sharp = require('sharp');
 const ffmpeg = require('fluent-ffmpeg');
 const chokidar = require('chokidar');
 const nodeDiskInfo = require('node-disk-info');
+const mime = require('mime-types');
 
 const settingsPath = path.join(process.env.APPDATA, 'fl-mngr', 'state.json');
-const videoFormats = ['.3gp','.avi','.flv','.mkv','.mov','.mp4','.mpg','.mpeg','.wmv'];
 let FSWatcher = { left: null, right: null };
 const FSOptions = {
     ignored: / (^| [\\/\\])\../,
@@ -130,19 +130,28 @@ function dragStart(e, files) {
 function copyOrMove(e, { selected, dir, target }, move) {
     let progressPayload = { type: 'new', task: move ? 'moving':'copying', total: selected.length };
     e.sender.send('progress', progressPayload);
-    
+
+    let options = { recursive: true, force: true }
     let dirname = path.dirname(target);
     selected.forEach(async selection => {
         let oldPath = path.join(dirname, selection);
         let newPath = path.join(dir, selection);
         try {
-            if (move) fs.rename(oldPath, newPath);
+            if (move && dirname[0] === dir[0]) {
+                fs.rename(oldPath, newPath);
+            }
             else {
                 let stat = await fs.stat(oldPath);
                 if (stat.isDirectory()) {
-                    fs.cp(oldPath, newPath, { recursive: true });
+                    fs.cp(oldPath, newPath, options)
+                        .finally(() => { if (move) fs.rm(oldPath, options); });
+                    
                 }
-                else fs.copyFile(oldPath, newPath);
+                else {
+                    fs.copyFile(oldPath, newPath)
+                        .finally(() => { if (move) fs.unlink(oldPath); });
+                    
+                }
             }
         } catch (err) {
             handleError(err)
@@ -179,22 +188,40 @@ function deleteItems(e, { selected, dir }) {
     e.sender.send('progress', progressPayload);
     selected.forEach(async selection => {
         let target = path.join(dir, selection);
-        await trash(target);
-        e.sender.send('delete', { selection, otherSide: false });
+        await trash(target).catch(async err => {
+            handleError(err);
+            console.log(err.message)
+            if (err.message.startsWith('Command failed') && target[0] !== 'C') {
+                fs.rm(target);
+                let stat = await fs.stat(target);
+                if (stat.isDirectory()) fs.rm(target, { recursive: true, force: true });
+                else fs.unlink(target) 
+                
+            }
+        });
         e.sender.send('progress', { type: 'complete' });
     });
 }
 
-function previewFile(e, target) {
-    sharp(target)
-        .resize({ width: 1920, kernel: sharp.kernel.mitchell, withoutEnlargement: true })
-        .jpeg({ quality: 100, chromaSubsampling: '4:4:4' })
-        .toBuffer()
-        .then(data => e.sender.send('preview', data))
-        .catch(handleError);
+async function previewFile(e, target) {
+    let mimeType = mime.contentType(path.extname(target)).split('/')[0]; 
+    if (mimeType === 'image') {
+        sharp(target)
+            .resize({ width: 1920, kernel: sharp.kernel.mitchell, withoutEnlargement: true })
+            .jpeg({ quality: 100, chromaSubsampling: '4:4:4' })
+            .toBuffer()
+            .then(data => e.sender.send('preview', { type: 'image', data }))
+            .catch(handleError);
+    } else if (mimeType === 'text') {
+        let data = await fs.readFile(target, 'utf-8');
+        e.sender.send('preview', { type: 'text', data })
+    } else {
+        e.sender.send('preview', { type: 'no-preview', data: null })
+    }
 }
 
 async function imgIcon(e, { target, ID, side }) {
+    let mimeType = mime.contentType(path.extname(target)).split('/')[0]; 
     const sendIcon = data => e.sender.send('icon', { data, ID, side });
 
     if (path.extname(target) === ".gif") {
@@ -206,7 +233,7 @@ async function imgIcon(e, { target, ID, side }) {
             .catch(handleError);
     } 
 
-    else if (videoFormats.includes(path.extname(target))) {
+    else if (mimeType === 'video') {
         let outputFolder = path.join(process.env.APPDATA, 'fl-mngr', 'thumbs');
         let outputFile = `temp-${path.basename(target)}.jpg`;
         let output = path.join(outputFolder, outputFile);
