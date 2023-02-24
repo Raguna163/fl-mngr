@@ -17,7 +17,7 @@ function Preview({preview, location}) {
             case 'image':
                 return ( <img src={`data:image/jpeg;base64,${data}`} alt='Preview' />);
             case 'text':
-                return ( <div id="preview-text"><p>{ data }</p></div> );
+                return ( <div id="preview-text"><pre>{ data }</pre></div> );
             case 'no-preview':
                 return ( <div id="preview-text"><p>Not Supported</p></div> );
             default:

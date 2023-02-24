@@ -3,7 +3,7 @@
   "author": "Tristan Collicott",
   "description": "File manager using electron & react.",
   "license": "epl-2.0",
-  "version": "1.11.2",
+  "version": "1.11.3",
   "private": true,
   "main": "public/electron.js",
   "homepage": "",
@@ -36,7 +36,7 @@
   },
   "scripts": {
     "dev:start": "concurrently -k \"yarn dev:react\" \"yarn dev:electron\"",
-    "dev:react": "cross-env NODE_OPTIONS=--openssl-legacy-provider react-scripts start",
+    "dev:react": "cross-env NODE_OPTIONS=--openssl-legacy-provider BROWSER=none react-scripts start",
     "dev:electron": "electronmon .",
     "build:react": "set NODE_OPTIONS=--openssl-legacy-provider && react-scripts build",
     "postbuild:react": "node mid-build.js",

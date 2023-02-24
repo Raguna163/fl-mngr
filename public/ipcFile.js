@@ -204,7 +204,9 @@ function deleteItems(e, { selected, dir }) {
 }
 
 async function previewFile(e, target) {
-    let mimeType = mime.contentType(path.extname(target)).split('/')[0]; 
+    let mimeType = mime.contentType(path.extname(target)).split('/')[0];
+    console.log(mimeType)
+    console.log(path.extname(target))
     if (mimeType === 'image') {
         sharp(target)
             .resize({ width: 1920, kernel: sharp.kernel.mitchell, withoutEnlargement: true })
@@ -212,7 +214,7 @@ async function previewFile(e, target) {
             .toBuffer()
             .then(data => e.sender.send('preview', { type: 'image', data }))
             .catch(handleError);
-    } else if (mimeType === 'text') {
+    } else if (mimeType === 'text' || (mimeType === 'application' && path.extname(target) === '.js')) {
         let data = await fs.readFile(target, 'utf-8');
         e.sender.send('preview', { type: 'text', data })
     } else {
